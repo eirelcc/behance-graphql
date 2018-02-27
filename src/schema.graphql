@@ -1,5 +1,7 @@
+# import Project from "./generated/prisma.graphql"
+
 type Query {
-    projects(filter: String, skip: Int, first: Int): [String]
+    projects(q: String): [Project]
 }
 
 type Mutation {

@@ -4,3 +4,41 @@ type User {
     email: String! @unique
     password: String!
 }
+
+type Project {
+    id: ID! @unique
+    name: String!
+    published_on: Int!
+    created_on: Int!
+    modified_on: Int!
+    url: String!
+    fields: [String!]
+    mature_content: Int!
+    owners: [Owner!]!
+    stats: Stats!
+}
+
+type Owner {
+    id: ID! @unique
+    first_name: String!
+    last_name: String!
+    username: String!
+    city: String
+    state: String
+    country: String
+    company: String
+    occupation: String
+    created_on: Int!
+    url: String!
+    display_name: String!
+    # images: Images!
+    fields: [String!]!
+}
+
+type Stats {
+    views: Int!
+    appreciations: Int!
+    comments: Int!
+}
+
+# type Images {}

@@ -1071,6 +1071,10 @@ dotenv@^4.0.0:
   version "4.0.0"
   resolved "http://37.187.163.104:4873/dotenv/-/dotenv-4.0.0/864ef1379aced55ce6f95debecdce179f7a0cd1d.tgz#864ef1379aced55ce6f95debecdce179f7a0cd1d"
 
+dotenv@^5.0.1:
+  version "5.0.1"
+  resolved "http://37.187.163.104:4873/dotenv/-/dotenv-5.0.1/a5317459bd3d79ab88cff6e44057a6a3fbb1fcef.tgz#a5317459bd3d79ab88cff6e44057a6a3fbb1fcef"
+
 download-github-repo@^0.1.3:
   version "0.1.4"
   resolved "http://37.187.163.104:4873/download-github-repo/-/download-github-repo-0.1.4/9638784c32f40a2c8930922b833b799f33443792.tgz#9638784c32f40a2c8930922b833b799f33443792"
@@ -3676,7 +3680,7 @@ punycode@^1.4.1:
   version "1.4.1"
   resolved "http://37.187.163.104:4873/punycode/-/punycode-1.4.1/c0d5a63b2718800ad8e1eb0fa5269c84dd41845e.tgz#c0d5a63b2718800ad8e1eb0fa5269c84dd41845e"
 
-qs@6.5.1, qs@~6.5.1:
+qs@6.5.1, qs@^6.5.1, qs@~6.5.1:
   version "6.5.1"
   resolved "http://37.187.163.104:4873/qs/-/qs-6.5.1/349cdf6eef89ec45c12d7d5eb3fc0c870343a6d8.tgz#349cdf6eef89ec45c12d7d5eb3fc0c870343a6d8"
 
