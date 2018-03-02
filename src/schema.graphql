@@ -1,7 +1,7 @@
 # import Project from "./generated/prisma.graphql"
 
 type Query {
-    projects(q: String): [Project]
+    projects(params: ProjectsInput): [Project]!
 }
 
 type Mutation {
@@ -18,4 +18,33 @@ type User {
     id: ID!
     name: String!
     email: String!
+}
+
+input ProjectsInput {
+    q: String
+    sort: Sort
+    time: Timestamp
+    field: String
+    country: String
+    state: String
+    city: String
+    page: Int
+    tags: String
+    color_hex: String
+    color_range: Int
+    license: String
+}
+
+enum Timestamp {
+    today
+    week
+    month
+}
+
+enum Sort {
+    featured_date
+    appreciations
+    views
+    comments
+    published_date
 }
