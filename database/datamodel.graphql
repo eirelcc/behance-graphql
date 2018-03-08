@@ -31,7 +31,6 @@ type Owner {
     created_on: Int!
     url: String!
     display_name: String!
-    # images: Images!
     fields: [String!]!
 }
 
@@ -40,5 +39,3 @@ type Stats {
     appreciations: Int!
     comments: Int!
 }
-
-# type Images {}

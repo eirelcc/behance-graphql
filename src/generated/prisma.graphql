@@ -18,6 +18,7 @@ type Owner implements Node {
   created_on: Int!
   url: String!
   display_name: String!
+  images: [String!]
   fields: [String!]
 }
 
@@ -77,26 +78,26 @@ scalar Long
 
 type Mutation {
   createUser(data: UserCreateInput!): User!
+  createProject(data: ProjectCreateInput!): Project!
   createOwner(data: OwnerCreateInput!): Owner!
   createStats(data: StatsCreateInput!): Stats!
-  createProject(data: ProjectCreateInput!): Project!
   updateUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
-  updateOwner(data: OwnerUpdateInput!, where: OwnerWhereUniqueInput!): Owner
   updateProject(data: ProjectUpdateInput!, where: ProjectWhereUniqueInput!): Project
+  updateOwner(data: OwnerUpdateInput!, where: OwnerWhereUniqueInput!): Owner
   deleteUser(where: UserWhereUniqueInput!): User
-  deleteOwner(where: OwnerWhereUniqueInput!): Owner
   deleteProject(where: ProjectWhereUniqueInput!): Project
+  deleteOwner(where: OwnerWhereUniqueInput!): Owner
   upsertUser(where: UserWhereUniqueInput!, create: UserCreateInput!, update: UserUpdateInput!): User!
-  upsertOwner(where: OwnerWhereUniqueInput!, create: OwnerCreateInput!, update: OwnerUpdateInput!): Owner!
   upsertProject(where: ProjectWhereUniqueInput!, create: ProjectCreateInput!, update: ProjectUpdateInput!): Project!
+  upsertOwner(where: OwnerWhereUniqueInput!, create: OwnerCreateInput!, update: OwnerUpdateInput!): Owner!
   updateManyUsers(data: UserUpdateInput!, where: UserWhereInput!): BatchPayload!
+  updateManyProjects(data: ProjectUpdateInput!, where: ProjectWhereInput!): BatchPayload!
   updateManyOwners(data: OwnerUpdateInput!, where: OwnerWhereInput!): BatchPayload!
   updateManyStatses(data: StatsUpdateInput!, where: StatsWhereInput!): BatchPayload!
-  updateManyProjects(data: ProjectUpdateInput!, where: ProjectWhereInput!): BatchPayload!
   deleteManyUsers(where: UserWhereInput!): BatchPayload!
+  deleteManyProjects(where: ProjectWhereInput!): BatchPayload!
   deleteManyOwners(where: OwnerWhereInput!): BatchPayload!
   deleteManyStatses(where: StatsWhereInput!): BatchPayload!
-  deleteManyProjects(where: ProjectWhereInput!): BatchPayload!
 }
 
 enum MutationType {
@@ -134,6 +135,10 @@ input OwnerCreatefieldsInput {
   set: [String!]
 }
 
+input OwnerCreateimagesInput {
+  set: [String!]
+}
+
 input OwnerCreateInput {
   first_name: String!
   last_name: String!
@@ -146,6 +151,7 @@ input OwnerCreateInput {
   created_on: Int!
   url: String!
   display_name: String!
+  images: OwnerCreateimagesInput
   fields: OwnerCreatefieldsInput
 }
 
@@ -212,6 +218,7 @@ type OwnerPreviousValues {
   created_on: Int!
   url: String!
   display_name: String!
+  images: [String!]
   fields: [String!]
 }
 
@@ -250,7 +257,27 @@ input OwnerSubscriptionWhereInput {
   node: OwnerWhereInput
 }
 
+input OwnerUpdateDataInput {
+  first_name: String
+  last_name: String
+  username: String
+  city: String
+  state: String
+  country: String
+  company: String
+  occupation: String
+  created_on: Int
+  url: String
+  display_name: String
+  images: OwnerUpdateimagesInput
+  fields: OwnerUpdatefieldsInput
+}
+
 input OwnerUpdatefieldsInput {
+  set: [String!]
+}
+
+input OwnerUpdateimagesInput {
   set: [String!]
 }
 
@@ -266,6 +293,7 @@ input OwnerUpdateInput {
   created_on: Int
   url: String
   display_name: String
+  images: OwnerUpdateimagesInput
   fields: OwnerUpdatefieldsInput
 }
 
@@ -274,6 +302,19 @@ input OwnerUpdateManyInput {
   connect: [OwnerWhereUniqueInput!]
   disconnect: [OwnerWhereUniqueInput!]
   delete: [OwnerWhereUniqueInput!]
+  update: [OwnerUpdateWithWhereUniqueNestedInput!]
+  upsert: [OwnerUpsertWithWhereUniqueNestedInput!]
+}
+
+input OwnerUpdateWithWhereUniqueNestedInput {
+  where: OwnerWhereUniqueInput!
+  data: OwnerUpdateDataInput!
+}
+
+input OwnerUpsertWithWhereUniqueNestedInput {
+  where: OwnerWhereUniqueInput!
+  update: OwnerUpdateDataInput!
+  create: OwnerCreateInput!
 }
 
 input OwnerWhereInput {
@@ -1349,16 +1390,16 @@ input ProjectWhereUniqueInput {
 
 type Query {
   users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User]!
+  projects(where: ProjectWhereInput, orderBy: ProjectOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Project]!
   owners(where: OwnerWhereInput, orderBy: OwnerOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Owner]!
   statses(where: StatsWhereInput, orderBy: StatsOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Stats]!
-  projects(where: ProjectWhereInput, orderBy: ProjectOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Project]!
   user(where: UserWhereUniqueInput!): User
-  owner(where: OwnerWhereUniqueInput!): Owner
   project(where: ProjectWhereUniqueInput!): Project
+  owner(where: OwnerWhereUniqueInput!): Owner
   usersConnection(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserConnection!
+  projectsConnection(where: ProjectWhereInput, orderBy: ProjectOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ProjectConnection!
   ownersConnection(where: OwnerWhereInput, orderBy: OwnerOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): OwnerConnection!
   statsesConnection(where: StatsWhereInput, orderBy: StatsOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): StatsConnection!
-  projectsConnection(where: ProjectWhereInput, orderBy: ProjectOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ProjectConnection!
   """
   Fetches an object given its ID
   """
@@ -1469,6 +1510,12 @@ input StatsSubscriptionWhereInput {
   node: StatsWhereInput
 }
 
+input StatsUpdateDataInput {
+  views: Int
+  appreciations: Int
+  comments: Int
+}
+
 input StatsUpdateInput {
   views: Int
   appreciations: Int
@@ -1477,6 +1524,15 @@ input StatsUpdateInput {
 
 input StatsUpdateOneInput {
   create: StatsCreateInput
+  disconnect: Boolean
+  delete: Boolean
+  update: StatsUpdateDataInput
+  upsert: StatsUpsertNestedInput
+}
+
+input StatsUpsertNestedInput {
+  update: StatsUpdateDataInput!
+  create: StatsCreateInput!
 }
 
 input StatsWhereInput {
@@ -1579,9 +1635,9 @@ input StatsWhereInput {
 
 type Subscription {
   user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
+  project(where: ProjectSubscriptionWhereInput): ProjectSubscriptionPayload
   owner(where: OwnerSubscriptionWhereInput): OwnerSubscriptionPayload
   stats(where: StatsSubscriptionWhereInput): StatsSubscriptionPayload
-  project(where: ProjectSubscriptionWhereInput): ProjectSubscriptionPayload
 }
 
 """
