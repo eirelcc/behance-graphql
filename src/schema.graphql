@@ -15,6 +15,7 @@ type Query {
         color_range: Int
         license: String
     ): [Project]!
+    project(id: ID): Project!
 }
 
 type Mutation {
