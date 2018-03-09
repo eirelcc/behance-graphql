@@ -1,4 +1,4 @@
-# import Collection, Comment, Field, Project, User from "./generated/prisma.graphql"
+# import Collection, Comment, Field, Link, Project, User, Wip from "./generated/prisma.graphql"
 
 type Query {
     projects(params: ProjectsInput): [Project!]!
@@ -9,11 +9,34 @@ type Query {
     collections(params: CollectionsInput): [Collection!]!
     collection(id: ID!): Collection!
     collectionProjects(id: ID!): [Project!]!
+    users(params: UsersInput): [User!]
+    user(id: ID!): UserPayload!
+    userProjects(id: ID!, params: UserProjectsInput): [Project!]
+    userWips(id: ID!, params: UserProjectsInput): [Wip!]
 }
 
 type Mutation {
     signup(email: String!, password: String!, name: String!): AuthPayload
     login(email: String!, password: String!): AuthPayload
+}
+
+# TODO Compose with User
+type UserPayload {
+    id: ID!
+    first_name: String!
+    last_name: String!
+    username: String!
+    city: String
+    state: String
+    country: String
+    company: String
+    occupation: String
+    created_on: Int!
+    url: String!
+    display_name: String!
+    fields: [String!]!
+    twitter: String
+    links: [Link!]
 }
 
 type AuthPayload {
@@ -36,6 +59,29 @@ input ProjectsInput {
     license: String
 }
 
+input UsersInput {
+    q: String
+    field: String
+    country: String
+    state: String
+    city: String
+    page: Int
+    tags: String
+    sort: UsersSortOptions
+}
+
+input UserProjectsInput {
+    sort: ProjectsSortOptions
+    time: Timestamp
+    page: Int
+}
+
+# input UserWipsInput {
+#     sort: ProjectsSortOptions
+#     time: Timestamp
+#     page: Int
+# }
+
 input CollectionsInput {
     q: String
     time: Timestamp
@@ -44,6 +90,7 @@ input CollectionsInput {
 }
 
 enum Timestamp {
+    all
     today
     week
     month
@@ -55,6 +102,15 @@ enum ProjectsSortOptions {
     views
     comments
     published_date
+}
+
+enum UsersSortOptions {
+    featured_date
+    appreciations
+    views
+    comments
+    published_date
+    followed
 }
 
 enum CollectionsSortOptions {

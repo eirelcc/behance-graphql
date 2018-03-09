@@ -8,8 +8,19 @@ type Project {
     fields: [String!]
     mature_content: Int!
     owners: [User!]!
-    stats: Stats!
+    stats: ProjectsStats!
     comments: [Comment!]!
+}
+
+type Wip {
+    id: ID! @unique
+    created_on: Int!
+    owner: User!
+    privacy: String!
+    revisions: [Revision!]!
+    stats: WipStats!
+    title: String
+    url: String
 }
 
 type User {
@@ -32,16 +43,59 @@ type Collection {
     id: ID! @unique
     title: String!
     owners: [User!]!
-    stats: Stats!
+    stats: CollectionStats!
     images: [String!]
     created_on: Int!
     modified_on: Int!
 }
 
-type Stats {
+type Revision {
+    id: ID! @unique
+    created_on: Int!
+    description: String!
+    number: Int!
+    images: [RevisionImage!]!
+    short_url: String!
+    tags: [String!]
+    url: String!
+    wip_id: ID!
+}
+
+# https://github.com/graphcool/prisma/issues/1981
+type RevisionImageCollection {
+    description: String
+    high_definition: RevisionImage!
+    # normal_resolution: RevisionImage!
+    # thumbnail: RevisionImage!
+    # thumbnail_sm: RevisionImage!
+}
+
+type RevisionImage {
+    url: String!
+    height: Int!
+    width: Int!
+}
+
+type Link {
+    title: String!
+    url: String!
+}
+
+type ProjectsStats {
     views: Int!
     appreciations: Int!
     comments: Int!
+}
+
+type CollectionStats {
+    items: Int!
+    followers: Int!
+}
+
+type WipStats {
+    comments: Int!
+    revisions: Int!
+    views: Int!
 }
 
 type Comment {

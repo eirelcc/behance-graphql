@@ -15,29 +15,50 @@ async function fetchByURL(relativeURL, params) {
 }
 
 // Projects
-const projects = (parent, args, ctx, info) => fetchByURL(`/projects`, args);
-
-const project = (parent, args, ctx, info) => fetchByURL(`/projects/${args.id}`);
-
-const projectComments = (parent, args, ctx, info) =>
-    fetchByURL(`/projects/${args.id}/comments`);
+const projects = (root, args) => {
+    return fetchByURL(`/projects`, args.params);
+};
+const project = (root, args) => {
+    return fetchByURL(`/projects/${args.id}`);
+};
+const projectComments = (root, args) => {
+    return fetchByURL(`/projects/${args.id}/comments`);
+};
 
 // Creatives To Follow
-const creativesToFollow = (parent, args, ctx, info) =>
-    fetchByURL(`/creativestofollow`);
+const creativesToFollow = (root, args) => {
+    return fetchByURL(`/creativestofollow`);
+};
 
 // Creative Fields
-const fields = (parent, args, ctx, info) => fetchByURL(`/fields`);
+const fields = (root, args) => {
+    return fetchByURL(`/fields`);
+};
 
 // Collections
-const collections = (parent, args, ctx, info) =>
-    fetchByURL(`/collections`, args);
-
-const collection = (parent, args, ctx, info) =>
-    fetchByURL(`/collections/${args.id}`);
-
-const collectionProjects = (parent, args, ctx, info) =>
+const collections = (root, args) => {
+    return fetchByURL(`/collections`, args.params);
+};
+const collection = (root, args) => {
+    return fetchByURL(`/collections/${args.id}`);
+};
+const collectionProjects = (root, args) => {
     fetchByURL(`/collections/${args.id}/projects`);
+};
+
+// Users
+const users = (root, args) => {
+    return fetchByURL(`/users`, args.params);
+};
+const user = (root, args) => {
+    return fetchByURL(`/users/${args.id}`);
+};
+const userProjects = (root, args) => {
+    return fetchByURL(`/users/${args.id}/projects`, args.params);
+};
+const userWips = (root, args) => {
+    return fetchByURL(`/users/${args.id}/wips`, args.params);
+};
 
 module.exports = {
     project,
@@ -47,5 +68,9 @@ module.exports = {
     fields,
     collections,
     collection,
-    collectionProjects
+    collectionProjects,
+    users,
+    user,
+    userProjects,
+    userWips
 };
