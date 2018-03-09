@@ -1,4 +1,4 @@
-# import Project from "./generated/prisma.graphql"
+# import Project, Comment, User from "./generated/prisma.graphql"
 
 type Query {
     projects(
@@ -16,6 +16,7 @@ type Query {
         license: String
     ): [Project]!
     project(id: ID): Project!
+    comments(id: ID): [Comment!]!
 }
 
 type Mutation {
@@ -26,12 +27,6 @@ type Mutation {
 type AuthPayload {
     token: String
     user: User
-}
-
-type User {
-    id: ID!
-    name: String!
-    email: String!
 }
 
 enum Timestamp {

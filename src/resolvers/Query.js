@@ -14,11 +14,20 @@ async function fetchByURL(relativeURL, params) {
     return data;
 }
 
-const projects = (parent, args, ctx, info) => fetchByURL(`/projects`, args);
+const projects = (parent, args, ctx, info) => {
+    return fetchByURL(`/projects`, args);
+};
 
-const project = (parent, args, ctx, info) => fetchByURL(`/projects/${args.id}`);
+const project = (parent, args, ctx, info) => {
+    return fetchByURL(`/projects/${args.id}`);
+};
+
+const comments = (parent, args, ctx, info) => {
+    return fetchByURL(`/projects/${args.id}/comments`);
+};
 
 module.exports = {
     projects,
-    project
+    project,
+    comments
 };

@@ -1,10 +1,3 @@
-type User {
-    id: ID! @unique
-    name: String!
-    email: String! @unique
-    password: String!
-}
-
 type Project {
     id: ID! @unique
     name: String!
@@ -14,11 +7,12 @@ type Project {
     url: String!
     fields: [String!]
     mature_content: Int!
-    owners: [Owner!]!
+    owners: [User!]!
     stats: Stats!
+    comments: [Comment!]!
 }
 
-type Owner {
+type User {
     id: ID! @unique
     first_name: String!
     last_name: String!
@@ -38,4 +32,17 @@ type Stats {
     views: Int!
     appreciations: Int!
     comments: Int!
+}
+
+type Comment {
+    user: User!
+    comment: String!
+    created_on: Int!
+}
+
+type SU {
+    id: ID! @unique
+    name: String!
+    email: String! @unique
+    password: String!
 }
