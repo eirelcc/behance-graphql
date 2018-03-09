@@ -28,6 +28,16 @@ type User {
     fields: [String!]!
 }
 
+type Collection {
+    id: ID! @unique
+    title: String!
+    owners: [User!]!
+    stats: Stats!
+    images: [String!]
+    created_on: Int!
+    modified_on: Int!
+}
+
 type Stats {
     views: Int!
     appreciations: Int!
@@ -38,6 +48,11 @@ type Comment {
     user: User!
     comment: String!
     created_on: Int!
+}
+
+type Field {
+    id: ID! @unique
+    name: String!
 }
 
 type SU {

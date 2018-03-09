@@ -5,6 +5,21 @@
 # Model Types
 #
 
+type Collection implements Node {
+  id: ID!
+  title: String!
+  owners(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User!]
+  stats(where: StatsWhereInput): Stats!
+  images: [String!]
+  created_on: Int!
+  modified_on: Int!
+}
+
+type Field implements Node {
+  id: ID!
+  name: String!
+}
+
 type Project implements Node {
   id: ID!
   name: String!
@@ -47,7 +62,15 @@ type User implements Node {
 # Other Types
 #
 
+type AggregateCollection {
+  count: Int!
+}
+
 type AggregateComment {
+  count: Int!
+}
+
+type AggregateField {
   count: Int!
 }
 
@@ -72,6 +95,302 @@ type BatchPayload {
   The number of nodes that have been affected by the Batch operation.
   """
   count: Long!
+}
+
+"""
+A connection to a list of items.
+"""
+type CollectionConnection {
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  """
+  A list of edges.
+  """
+  edges: [CollectionEdge]!
+  aggregate: AggregateCollection!
+}
+
+input CollectionCreateimagesInput {
+  set: [String!]
+}
+
+input CollectionCreateInput {
+  title: String!
+  created_on: Int!
+  modified_on: Int!
+  images: CollectionCreateimagesInput
+  owners: UserCreateManyInput
+  stats: StatsCreateOneInput!
+}
+
+"""
+An edge in a connection.
+"""
+type CollectionEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: Collection!
+  """
+  A cursor for use in pagination.
+  """
+  cursor: String!
+}
+
+enum CollectionOrderByInput {
+  id_ASC
+  id_DESC
+  title_ASC
+  title_DESC
+  created_on_ASC
+  created_on_DESC
+  modified_on_ASC
+  modified_on_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  createdAt_ASC
+  createdAt_DESC
+}
+
+type CollectionPreviousValues {
+  id: ID!
+  title: String!
+  images: [String!]
+  created_on: Int!
+  modified_on: Int!
+}
+
+type CollectionSubscriptionPayload {
+  mutation: MutationType!
+  node: Collection
+  updatedFields: [String!]
+  previousValues: CollectionPreviousValues
+}
+
+input CollectionSubscriptionWhereInput {
+  """
+  Logical AND on all given filters.
+  """
+  AND: [CollectionSubscriptionWhereInput!]
+  """
+  Logical OR on all given filters.
+  """
+  OR: [CollectionSubscriptionWhereInput!]
+  """
+  The subscription event gets dispatched when it's listed in mutation_in
+  """
+  mutation_in: [MutationType!]
+  """
+  The subscription event gets only dispatched when one of the updated fields names is included in this list
+  """
+  updatedFields_contains: String
+  """
+  The subscription event gets only dispatched when all of the field names included in this list have been updated
+  """
+  updatedFields_contains_every: [String!]
+  """
+  The subscription event gets only dispatched when some of the field names included in this list have been updated
+  """
+  updatedFields_contains_some: [String!]
+  node: CollectionWhereInput
+}
+
+input CollectionUpdateimagesInput {
+  set: [String!]
+}
+
+input CollectionUpdateInput {
+  title: String
+  created_on: Int
+  modified_on: Int
+  images: CollectionUpdateimagesInput
+  owners: UserUpdateManyInput
+  stats: StatsUpdateOneInput
+}
+
+input CollectionWhereInput {
+  """
+  Logical AND on all given filters.
+  """
+  AND: [CollectionWhereInput!]
+  """
+  Logical OR on all given filters.
+  """
+  OR: [CollectionWhereInput!]
+  id: ID
+  """
+  All values that are not equal to given value.
+  """
+  id_not: ID
+  """
+  All values that are contained in given list.
+  """
+  id_in: [ID!]
+  """
+  All values that are not contained in given list.
+  """
+  id_not_in: [ID!]
+  """
+  All values less than the given value.
+  """
+  id_lt: ID
+  """
+  All values less than or equal the given value.
+  """
+  id_lte: ID
+  """
+  All values greater than the given value.
+  """
+  id_gt: ID
+  """
+  All values greater than or equal the given value.
+  """
+  id_gte: ID
+  """
+  All values containing the given string.
+  """
+  id_contains: ID
+  """
+  All values not containing the given string.
+  """
+  id_not_contains: ID
+  """
+  All values starting with the given string.
+  """
+  id_starts_with: ID
+  """
+  All values not starting with the given string.
+  """
+  id_not_starts_with: ID
+  """
+  All values ending with the given string.
+  """
+  id_ends_with: ID
+  """
+  All values not ending with the given string.
+  """
+  id_not_ends_with: ID
+  title: String
+  """
+  All values that are not equal to given value.
+  """
+  title_not: String
+  """
+  All values that are contained in given list.
+  """
+  title_in: [String!]
+  """
+  All values that are not contained in given list.
+  """
+  title_not_in: [String!]
+  """
+  All values less than the given value.
+  """
+  title_lt: String
+  """
+  All values less than or equal the given value.
+  """
+  title_lte: String
+  """
+  All values greater than the given value.
+  """
+  title_gt: String
+  """
+  All values greater than or equal the given value.
+  """
+  title_gte: String
+  """
+  All values containing the given string.
+  """
+  title_contains: String
+  """
+  All values not containing the given string.
+  """
+  title_not_contains: String
+  """
+  All values starting with the given string.
+  """
+  title_starts_with: String
+  """
+  All values not starting with the given string.
+  """
+  title_not_starts_with: String
+  """
+  All values ending with the given string.
+  """
+  title_ends_with: String
+  """
+  All values not ending with the given string.
+  """
+  title_not_ends_with: String
+  created_on: Int
+  """
+  All values that are not equal to given value.
+  """
+  created_on_not: Int
+  """
+  All values that are contained in given list.
+  """
+  created_on_in: [Int!]
+  """
+  All values that are not contained in given list.
+  """
+  created_on_not_in: [Int!]
+  """
+  All values less than the given value.
+  """
+  created_on_lt: Int
+  """
+  All values less than or equal the given value.
+  """
+  created_on_lte: Int
+  """
+  All values greater than the given value.
+  """
+  created_on_gt: Int
+  """
+  All values greater than or equal the given value.
+  """
+  created_on_gte: Int
+  modified_on: Int
+  """
+  All values that are not equal to given value.
+  """
+  modified_on_not: Int
+  """
+  All values that are contained in given list.
+  """
+  modified_on_in: [Int!]
+  """
+  All values that are not contained in given list.
+  """
+  modified_on_not_in: [Int!]
+  """
+  All values less than the given value.
+  """
+  modified_on_lt: Int
+  """
+  All values less than or equal the given value.
+  """
+  modified_on_lte: Int
+  """
+  All values greater than the given value.
+  """
+  modified_on_gt: Int
+  """
+  All values greater than or equal the given value.
+  """
+  modified_on_gte: Int
+  owners_every: UserWhereInput
+  owners_some: UserWhereInput
+  owners_none: UserWhereInput
+  stats: StatsWhereInput
+}
+
+input CollectionWhereUniqueInput {
+  id: ID
 }
 
 type Comment {
@@ -277,6 +596,215 @@ input CommentWhereInput {
 }
 
 """
+A connection to a list of items.
+"""
+type FieldConnection {
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  """
+  A list of edges.
+  """
+  edges: [FieldEdge]!
+  aggregate: AggregateField!
+}
+
+input FieldCreateInput {
+  name: String!
+}
+
+"""
+An edge in a connection.
+"""
+type FieldEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: Field!
+  """
+  A cursor for use in pagination.
+  """
+  cursor: String!
+}
+
+enum FieldOrderByInput {
+  id_ASC
+  id_DESC
+  name_ASC
+  name_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  createdAt_ASC
+  createdAt_DESC
+}
+
+type FieldPreviousValues {
+  id: ID!
+  name: String!
+}
+
+type FieldSubscriptionPayload {
+  mutation: MutationType!
+  node: Field
+  updatedFields: [String!]
+  previousValues: FieldPreviousValues
+}
+
+input FieldSubscriptionWhereInput {
+  """
+  Logical AND on all given filters.
+  """
+  AND: [FieldSubscriptionWhereInput!]
+  """
+  Logical OR on all given filters.
+  """
+  OR: [FieldSubscriptionWhereInput!]
+  """
+  The subscription event gets dispatched when it's listed in mutation_in
+  """
+  mutation_in: [MutationType!]
+  """
+  The subscription event gets only dispatched when one of the updated fields names is included in this list
+  """
+  updatedFields_contains: String
+  """
+  The subscription event gets only dispatched when all of the field names included in this list have been updated
+  """
+  updatedFields_contains_every: [String!]
+  """
+  The subscription event gets only dispatched when some of the field names included in this list have been updated
+  """
+  updatedFields_contains_some: [String!]
+  node: FieldWhereInput
+}
+
+input FieldUpdateInput {
+  name: String
+}
+
+input FieldWhereInput {
+  """
+  Logical AND on all given filters.
+  """
+  AND: [FieldWhereInput!]
+  """
+  Logical OR on all given filters.
+  """
+  OR: [FieldWhereInput!]
+  id: ID
+  """
+  All values that are not equal to given value.
+  """
+  id_not: ID
+  """
+  All values that are contained in given list.
+  """
+  id_in: [ID!]
+  """
+  All values that are not contained in given list.
+  """
+  id_not_in: [ID!]
+  """
+  All values less than the given value.
+  """
+  id_lt: ID
+  """
+  All values less than or equal the given value.
+  """
+  id_lte: ID
+  """
+  All values greater than the given value.
+  """
+  id_gt: ID
+  """
+  All values greater than or equal the given value.
+  """
+  id_gte: ID
+  """
+  All values containing the given string.
+  """
+  id_contains: ID
+  """
+  All values not containing the given string.
+  """
+  id_not_contains: ID
+  """
+  All values starting with the given string.
+  """
+  id_starts_with: ID
+  """
+  All values not starting with the given string.
+  """
+  id_not_starts_with: ID
+  """
+  All values ending with the given string.
+  """
+  id_ends_with: ID
+  """
+  All values not ending with the given string.
+  """
+  id_not_ends_with: ID
+  name: String
+  """
+  All values that are not equal to given value.
+  """
+  name_not: String
+  """
+  All values that are contained in given list.
+  """
+  name_in: [String!]
+  """
+  All values that are not contained in given list.
+  """
+  name_not_in: [String!]
+  """
+  All values less than the given value.
+  """
+  name_lt: String
+  """
+  All values less than or equal the given value.
+  """
+  name_lte: String
+  """
+  All values greater than the given value.
+  """
+  name_gt: String
+  """
+  All values greater than or equal the given value.
+  """
+  name_gte: String
+  """
+  All values containing the given string.
+  """
+  name_contains: String
+  """
+  All values not containing the given string.
+  """
+  name_not_contains: String
+  """
+  All values starting with the given string.
+  """
+  name_starts_with: String
+  """
+  All values not starting with the given string.
+  """
+  name_not_starts_with: String
+  """
+  All values ending with the given string.
+  """
+  name_ends_with: String
+  """
+  All values not ending with the given string.
+  """
+  name_not_ends_with: String
+}
+
+input FieldWhereUniqueInput {
+  id: ID
+}
+
+"""
 The `Long` scalar type represents non-fractional signed whole numeric values.
 Long can represent values between -(2^63) and 2^63 - 1.
 """
@@ -285,27 +813,39 @@ scalar Long
 type Mutation {
   createProject(data: ProjectCreateInput!): Project!
   createUser(data: UserCreateInput!): User!
+  createCollection(data: CollectionCreateInput!): Collection!
   createStats(data: StatsCreateInput!): Stats!
   createComment(data: CommentCreateInput!): Comment!
+  createField(data: FieldCreateInput!): Field!
   createSU(data: SUCreateInput!): SU!
   updateProject(data: ProjectUpdateInput!, where: ProjectWhereUniqueInput!): Project
   updateUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
+  updateCollection(data: CollectionUpdateInput!, where: CollectionWhereUniqueInput!): Collection
+  updateField(data: FieldUpdateInput!, where: FieldWhereUniqueInput!): Field
   updateSU(data: SUUpdateInput!, where: SUWhereUniqueInput!): SU
   deleteProject(where: ProjectWhereUniqueInput!): Project
   deleteUser(where: UserWhereUniqueInput!): User
+  deleteCollection(where: CollectionWhereUniqueInput!): Collection
+  deleteField(where: FieldWhereUniqueInput!): Field
   deleteSU(where: SUWhereUniqueInput!): SU
   upsertProject(where: ProjectWhereUniqueInput!, create: ProjectCreateInput!, update: ProjectUpdateInput!): Project!
   upsertUser(where: UserWhereUniqueInput!, create: UserCreateInput!, update: UserUpdateInput!): User!
+  upsertCollection(where: CollectionWhereUniqueInput!, create: CollectionCreateInput!, update: CollectionUpdateInput!): Collection!
+  upsertField(where: FieldWhereUniqueInput!, create: FieldCreateInput!, update: FieldUpdateInput!): Field!
   upsertSU(where: SUWhereUniqueInput!, create: SUCreateInput!, update: SUUpdateInput!): SU!
   updateManyProjects(data: ProjectUpdateInput!, where: ProjectWhereInput!): BatchPayload!
   updateManyUsers(data: UserUpdateInput!, where: UserWhereInput!): BatchPayload!
+  updateManyCollections(data: CollectionUpdateInput!, where: CollectionWhereInput!): BatchPayload!
   updateManyStatses(data: StatsUpdateInput!, where: StatsWhereInput!): BatchPayload!
   updateManyComments(data: CommentUpdateInput!, where: CommentWhereInput!): BatchPayload!
+  updateManyFields(data: FieldUpdateInput!, where: FieldWhereInput!): BatchPayload!
   updateManySUs(data: SUUpdateInput!, where: SUWhereInput!): BatchPayload!
   deleteManyProjects(where: ProjectWhereInput!): BatchPayload!
   deleteManyUsers(where: UserWhereInput!): BatchPayload!
+  deleteManyCollections(where: CollectionWhereInput!): BatchPayload!
   deleteManyStatses(where: StatsWhereInput!): BatchPayload!
   deleteManyComments(where: CommentWhereInput!): BatchPayload!
+  deleteManyFields(where: FieldWhereInput!): BatchPayload!
   deleteManySUs(where: SUWhereInput!): BatchPayload!
 }
 
@@ -777,16 +1317,22 @@ input ProjectWhereUniqueInput {
 type Query {
   projects(where: ProjectWhereInput, orderBy: ProjectOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Project]!
   users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User]!
+  collections(where: CollectionWhereInput, orderBy: CollectionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Collection]!
   statses(where: StatsWhereInput, orderBy: StatsOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Stats]!
   comments(where: CommentWhereInput, orderBy: CommentOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Comment]!
+  fields(where: FieldWhereInput, orderBy: FieldOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Field]!
   sUs(where: SUWhereInput, orderBy: SUOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [SU]!
   project(where: ProjectWhereUniqueInput!): Project
   user(where: UserWhereUniqueInput!): User
+  collection(where: CollectionWhereUniqueInput!): Collection
+  field(where: FieldWhereUniqueInput!): Field
   sU(where: SUWhereUniqueInput!): SU
   projectsConnection(where: ProjectWhereInput, orderBy: ProjectOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ProjectConnection!
   usersConnection(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserConnection!
+  collectionsConnection(where: CollectionWhereInput, orderBy: CollectionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): CollectionConnection!
   statsesConnection(where: StatsWhereInput, orderBy: StatsOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): StatsConnection!
   commentsConnection(where: CommentWhereInput, orderBy: CommentOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): CommentConnection!
+  fieldsConnection(where: FieldWhereInput, orderBy: FieldOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): FieldConnection!
   sUsConnection(where: SUWhereInput, orderBy: SUOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): SUConnection!
   """
   Fetches an object given its ID
@@ -1024,8 +1570,10 @@ input StatsWhereInput {
 type Subscription {
   project(where: ProjectSubscriptionWhereInput): ProjectSubscriptionPayload
   user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
+  collection(where: CollectionSubscriptionWhereInput): CollectionSubscriptionPayload
   stats(where: StatsSubscriptionWhereInput): StatsSubscriptionPayload
   comment(where: CommentSubscriptionWhereInput): CommentSubscriptionPayload
+  field(where: FieldSubscriptionWhereInput): FieldSubscriptionPayload
   sU(where: SUSubscriptionWhereInput): SUSubscriptionPayload
 }
 

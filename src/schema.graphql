@@ -1,22 +1,14 @@
-# import Project, Comment, User from "./generated/prisma.graphql"
+# import Collection, Comment, Field, Project, User from "./generated/prisma.graphql"
 
 type Query {
-    projects(
-        q: String
-        sort: Sort
-        time: Timestamp
-        field: String
-        country: String
-        state: String
-        city: String
-        page: Int
-        tags: String
-        color_hex: String
-        color_range: Int
-        license: String
-    ): [Project]!
-    project(id: ID): Project!
-    comments(id: ID): [Comment!]!
+    projects(params: ProjectsInput): [Project!]!
+    project(id: ID!): Project!
+    projectComments(id: ID!): [Comment!]!
+    fields: [Field!]!
+    creativesToFollow: [User!]!
+    collections(params: CollectionsInput): [Collection!]!
+    collection(id: ID!): Collection!
+    collectionProjects(id: ID!): [Project!]!
 }
 
 type Mutation {
@@ -29,16 +21,44 @@ type AuthPayload {
     user: User
 }
 
+input ProjectsInput {
+    q: String
+    sort: ProjectsSortOptions
+    time: Timestamp
+    field: String
+    country: String
+    state: String
+    city: String
+    page: Int
+    tags: String
+    color_hex: String
+    color_range: Int
+    license: String
+}
+
+input CollectionsInput {
+    q: String
+    time: Timestamp
+    page: String
+    sort: CollectionsSortOptions
+}
+
 enum Timestamp {
     today
     week
     month
 }
 
-enum Sort {
+enum ProjectsSortOptions {
     featured_date
     appreciations
     views
     comments
     published_date
+}
+
+enum CollectionsSortOptions {
+    comments
+    views
+    last_item_added_date
 }

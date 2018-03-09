@@ -14,20 +14,38 @@ async function fetchByURL(relativeURL, params) {
     return data;
 }
 
-const projects = (parent, args, ctx, info) => {
-    return fetchByURL(`/projects`, args);
-};
+// Projects
+const projects = (parent, args, ctx, info) => fetchByURL(`/projects`, args);
 
-const project = (parent, args, ctx, info) => {
-    return fetchByURL(`/projects/${args.id}`);
-};
+const project = (parent, args, ctx, info) => fetchByURL(`/projects/${args.id}`);
 
-const comments = (parent, args, ctx, info) => {
-    return fetchByURL(`/projects/${args.id}/comments`);
-};
+const projectComments = (parent, args, ctx, info) =>
+    fetchByURL(`/projects/${args.id}/comments`);
+
+// Creatives To Follow
+const creativesToFollow = (parent, args, ctx, info) =>
+    fetchByURL(`/creativestofollow`);
+
+// Creative Fields
+const fields = (parent, args, ctx, info) => fetchByURL(`/fields`);
+
+// Collections
+const collections = (parent, args, ctx, info) =>
+    fetchByURL(`/collections`, args);
+
+const collection = (parent, args, ctx, info) =>
+    fetchByURL(`/collections/${args.id}`);
+
+const collectionProjects = (parent, args, ctx, info) =>
+    fetchByURL(`/collections/${args.id}/projects`);
 
 module.exports = {
-    projects,
     project,
-    comments
+    projects,
+    projectComments,
+    creativesToFollow,
+    fields,
+    collections,
+    collection,
+    collectionProjects
 };
