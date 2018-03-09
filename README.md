@@ -1,6 +1,6 @@
 # Behance GraphQL server
 
-<img src="https://raw.githubusercontent.com/eirelcc/behance-graphql/master/powered-by-behance-logo.png" width="120px" />
+<img src="https://github.com/eirelcc/behance-graphql/blob/master/behance-logo.png" width="115px" />
 
 ## Inspired by
 
