@@ -1,4 +1,4 @@
-# import Collection, Comment, Field, Link, Project, User, Wip from "./generated/prisma.graphql"
+# import Appreciation, Collection, Comment, Field, Link, Project, User, Wip from "./generated/prisma.graphql"
 
 type Query {
     projects(params: ProjectsInput): [Project!]!
@@ -13,6 +13,7 @@ type Query {
     user(id: ID!): UserPayload!
     userProjects(id: ID!, params: UserProjectsInput): [Project!]
     userWips(id: ID!, params: UserProjectsInput): [Wip!]
+    userAppreciations(id: ID!, params: UserAppreciationsInput): [Appreciation!]
 }
 
 type Mutation {
@@ -47,7 +48,7 @@ type AuthPayload {
 input ProjectsInput {
     q: String
     sort: ProjectsSortOptions
-    time: Timestamp
+    time: Period
     field: String
     country: String
     state: String
@@ -72,24 +73,28 @@ input UsersInput {
 
 input UserProjectsInput {
     sort: ProjectsSortOptions
-    time: Timestamp
+    time: Period
+    page: Int
+}
+
+input UserAppreciationsInput {
     page: Int
 }
 
 # input UserWipsInput {
 #     sort: ProjectsSortOptions
-#     time: Timestamp
+#     time: Period
 #     page: Int
 # }
 
 input CollectionsInput {
     q: String
-    time: Timestamp
+    time: Period
     page: String
     sort: CollectionsSortOptions
 }
 
-enum Timestamp {
+enum Period {
     all
     today
     week

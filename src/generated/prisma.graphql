@@ -85,6 +85,10 @@ type Wip implements Node {
 # Other Types
 #
 
+type AggregateAppreciation {
+  count: Int!
+}
+
 type AggregateCollection {
   count: Int!
 }
@@ -139,6 +143,141 @@ type AggregateWip {
 
 type AggregateWipStats {
   count: Int!
+}
+
+type Appreciation {
+  project(where: ProjectWhereInput): Project!
+  timestamp: Int!
+}
+
+"""
+A connection to a list of items.
+"""
+type AppreciationConnection {
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  """
+  A list of edges.
+  """
+  edges: [AppreciationEdge]!
+  aggregate: AggregateAppreciation!
+}
+
+input AppreciationCreateInput {
+  timestamp: Int!
+  project: ProjectCreateOneInput!
+}
+
+"""
+An edge in a connection.
+"""
+type AppreciationEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: Appreciation!
+  """
+  A cursor for use in pagination.
+  """
+  cursor: String!
+}
+
+enum AppreciationOrderByInput {
+  timestamp_ASC
+  timestamp_DESC
+  id_ASC
+  id_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  createdAt_ASC
+  createdAt_DESC
+}
+
+type AppreciationPreviousValues {
+  timestamp: Int!
+}
+
+type AppreciationSubscriptionPayload {
+  mutation: MutationType!
+  node: Appreciation
+  updatedFields: [String!]
+  previousValues: AppreciationPreviousValues
+}
+
+input AppreciationSubscriptionWhereInput {
+  """
+  Logical AND on all given filters.
+  """
+  AND: [AppreciationSubscriptionWhereInput!]
+  """
+  Logical OR on all given filters.
+  """
+  OR: [AppreciationSubscriptionWhereInput!]
+  """
+  The subscription event gets dispatched when it's listed in mutation_in
+  """
+  mutation_in: [MutationType!]
+  """
+  The subscription event gets only dispatched when one of the updated fields names is included in this list
+  """
+  updatedFields_contains: String
+  """
+  The subscription event gets only dispatched when all of the field names included in this list have been updated
+  """
+  updatedFields_contains_every: [String!]
+  """
+  The subscription event gets only dispatched when some of the field names included in this list have been updated
+  """
+  updatedFields_contains_some: [String!]
+  node: AppreciationWhereInput
+}
+
+input AppreciationUpdateInput {
+  timestamp: Int
+  project: ProjectUpdateOneInput
+}
+
+input AppreciationWhereInput {
+  """
+  Logical AND on all given filters.
+  """
+  AND: [AppreciationWhereInput!]
+  """
+  Logical OR on all given filters.
+  """
+  OR: [AppreciationWhereInput!]
+  timestamp: Int
+  """
+  All values that are not equal to given value.
+  """
+  timestamp_not: Int
+  """
+  All values that are contained in given list.
+  """
+  timestamp_in: [Int!]
+  """
+  All values that are not contained in given list.
+  """
+  timestamp_not_in: [Int!]
+  """
+  All values less than the given value.
+  """
+  timestamp_lt: Int
+  """
+  All values less than or equal the given value.
+  """
+  timestamp_lte: Int
+  """
+  All values greater than the given value.
+  """
+  timestamp_gt: Int
+  """
+  All values greater than or equal the given value.
+  """
+  timestamp_gte: Int
+  project: ProjectWhereInput
 }
 
 type BatchPayload {
@@ -1269,6 +1408,7 @@ type Mutation {
   createUser(data: UserCreateInput!): User!
   createCollection(data: CollectionCreateInput!): Collection!
   createRevision(data: RevisionCreateInput!): Revision!
+  createAppreciation(data: AppreciationCreateInput!): Appreciation!
   createRevisionImageCollection(data: RevisionImageCollectionCreateInput!): RevisionImageCollection!
   createRevisionImage(data: RevisionImageCreateInput!): RevisionImage!
   createLink(data: LinkCreateInput!): Link!
@@ -1304,6 +1444,7 @@ type Mutation {
   updateManyUsers(data: UserUpdateInput!, where: UserWhereInput!): BatchPayload!
   updateManyCollections(data: CollectionUpdateInput!, where: CollectionWhereInput!): BatchPayload!
   updateManyRevisions(data: RevisionUpdateInput!, where: RevisionWhereInput!): BatchPayload!
+  updateManyAppreciations(data: AppreciationUpdateInput!, where: AppreciationWhereInput!): BatchPayload!
   updateManyRevisionImageCollections(data: RevisionImageCollectionUpdateInput!, where: RevisionImageCollectionWhereInput!): BatchPayload!
   updateManyRevisionImages(data: RevisionImageUpdateInput!, where: RevisionImageWhereInput!): BatchPayload!
   updateManyLinks(data: LinkUpdateInput!, where: LinkWhereInput!): BatchPayload!
@@ -1318,6 +1459,7 @@ type Mutation {
   deleteManyUsers(where: UserWhereInput!): BatchPayload!
   deleteManyCollections(where: CollectionWhereInput!): BatchPayload!
   deleteManyRevisions(where: RevisionWhereInput!): BatchPayload!
+  deleteManyAppreciations(where: AppreciationWhereInput!): BatchPayload!
   deleteManyRevisionImageCollections(where: RevisionImageCollectionWhereInput!): BatchPayload!
   deleteManyRevisionImages(where: RevisionImageWhereInput!): BatchPayload!
   deleteManyLinks(where: LinkWhereInput!): BatchPayload!
@@ -1397,6 +1539,11 @@ input ProjectCreateInput {
   owners: UserCreateManyInput
   stats: ProjectsStatsCreateOneInput!
   comments: CommentCreateManyInput
+}
+
+input ProjectCreateOneInput {
+  create: ProjectCreateInput
+  connect: ProjectWhereUniqueInput
 }
 
 """
@@ -1704,6 +1851,19 @@ input ProjectSubscriptionWhereInput {
   node: ProjectWhereInput
 }
 
+input ProjectUpdateDataInput {
+  name: String
+  published_on: Int
+  created_on: Int
+  modified_on: Int
+  url: String
+  mature_content: Int
+  fields: ProjectUpdatefieldsInput
+  owners: UserUpdateManyInput
+  stats: ProjectsStatsUpdateOneInput
+  comments: CommentUpdateManyInput
+}
+
 input ProjectUpdatefieldsInput {
   set: [String!]
 }
@@ -1719,6 +1879,20 @@ input ProjectUpdateInput {
   owners: UserUpdateManyInput
   stats: ProjectsStatsUpdateOneInput
   comments: CommentUpdateManyInput
+}
+
+input ProjectUpdateOneInput {
+  create: ProjectCreateInput
+  connect: ProjectWhereUniqueInput
+  disconnect: Boolean
+  delete: Boolean
+  update: ProjectUpdateDataInput
+  upsert: ProjectUpsertNestedInput
+}
+
+input ProjectUpsertNestedInput {
+  update: ProjectUpdateDataInput!
+  create: ProjectCreateInput!
 }
 
 input ProjectWhereInput {
@@ -2024,6 +2198,7 @@ type Query {
   users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User]!
   collections(where: CollectionWhereInput, orderBy: CollectionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Collection]!
   revisions(where: RevisionWhereInput, orderBy: RevisionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Revision]!
+  appreciations(where: AppreciationWhereInput, orderBy: AppreciationOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Appreciation]!
   revisionImageCollections(where: RevisionImageCollectionWhereInput, orderBy: RevisionImageCollectionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [RevisionImageCollection]!
   revisionImages(where: RevisionImageWhereInput, orderBy: RevisionImageOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [RevisionImage]!
   links(where: LinkWhereInput, orderBy: LinkOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Link]!
@@ -2045,6 +2220,7 @@ type Query {
   usersConnection(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserConnection!
   collectionsConnection(where: CollectionWhereInput, orderBy: CollectionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): CollectionConnection!
   revisionsConnection(where: RevisionWhereInput, orderBy: RevisionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): RevisionConnection!
+  appreciationsConnection(where: AppreciationWhereInput, orderBy: AppreciationOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): AppreciationConnection!
   revisionImageCollectionsConnection(where: RevisionImageCollectionWhereInput, orderBy: RevisionImageCollectionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): RevisionImageCollectionConnection!
   revisionImagesConnection(where: RevisionImageWhereInput, orderBy: RevisionImageOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): RevisionImageConnection!
   linksConnection(where: LinkWhereInput, orderBy: LinkOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): LinkConnection!
@@ -2987,6 +3163,7 @@ type Subscription {
   user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
   collection(where: CollectionSubscriptionWhereInput): CollectionSubscriptionPayload
   revision(where: RevisionSubscriptionWhereInput): RevisionSubscriptionPayload
+  appreciation(where: AppreciationSubscriptionWhereInput): AppreciationSubscriptionPayload
   revisionImageCollection(where: RevisionImageCollectionSubscriptionWhereInput): RevisionImageCollectionSubscriptionPayload
   revisionImage(where: RevisionImageSubscriptionWhereInput): RevisionImageSubscriptionPayload
   link(where: LinkSubscriptionWhereInput): LinkSubscriptionPayload

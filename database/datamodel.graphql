@@ -61,6 +61,11 @@ type Revision {
     wip_id: ID!
 }
 
+type Appreciation {
+    project: Project!
+    timestamp: Int!
+}
+
 # https://github.com/graphcool/prisma/issues/1981
 type RevisionImageCollection {
     description: String
