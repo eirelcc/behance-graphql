@@ -14,6 +14,7 @@ type Query {
     userProjects(id: ID!, params: UserProjectsInput): [Project!]
     userWips(id: ID!, params: UserProjectsInput): [Wip!]
     userAppreciations(id: ID!, params: UserAppreciationsInput): [Appreciation!]
+    userCollections(id: ID!, params: UserCollectionsInput): [Collection!]
 }
 
 type Mutation {
@@ -47,7 +48,7 @@ type AuthPayload {
 
 input ProjectsInput {
     q: String
-    sort: ProjectsSortOptions
+    sort: ProjectSortBy
     time: Period
     field: String
     country: String
@@ -68,11 +69,11 @@ input UsersInput {
     city: String
     page: Int
     tags: String
-    sort: UsersSortOptions
+    sort: UserSortBy
 }
 
 input UserProjectsInput {
-    sort: ProjectsSortOptions
+    sort: ProjectSortBy
     time: Period
     page: Int
 }
@@ -81,17 +82,17 @@ input UserAppreciationsInput {
     page: Int
 }
 
-# input UserWipsInput {
-#     sort: ProjectsSortOptions
-#     time: Period
-#     page: Int
-# }
+input UserCollectionsInput {
+    time: Period
+    page: String
+    sort: CollectionSortBy
+}
 
 input CollectionsInput {
     q: String
     time: Period
     page: String
-    sort: CollectionsSortOptions
+    sort: CollectionSortBy
 }
 
 enum Period {
@@ -101,7 +102,7 @@ enum Period {
     month
 }
 
-enum ProjectsSortOptions {
+enum ProjectSortBy {
     featured_date
     appreciations
     views
@@ -109,7 +110,7 @@ enum ProjectsSortOptions {
     published_date
 }
 
-enum UsersSortOptions {
+enum UserSortBy {
     featured_date
     appreciations
     views
@@ -118,7 +119,7 @@ enum UsersSortOptions {
     followed
 }
 
-enum CollectionsSortOptions {
+enum CollectionSortBy {
     comments
     views
     last_item_added_date

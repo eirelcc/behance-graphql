@@ -62,6 +62,9 @@ const userWips = (root, args) => {
 const userAppreciations = (root, args) => {
     return fetchByURL(`/users/${args.id}/appreciations`, args.params);
 };
+const userCollections = (root, args) => {
+    return fetchByURL(`/users/${args.id}/collections`, args.params);
+};
 
 module.exports = {
     project,
@@ -76,5 +79,6 @@ module.exports = {
     user,
     userProjects,
     userWips,
-    userAppreciations
+    userAppreciations,
+    userCollections
 };
