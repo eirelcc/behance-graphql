@@ -27,18 +27,15 @@ const projectComments = (root, args) => {
     return fetchByURL(`/projects/${args.id}/comments`);
 };
 
-
 // Creatives To Follow
 const creativesToFollow = (root, args) => {
     return fetchByURL(`/creativestofollow`);
 };
 
-
 // Creative Fields
 const fields = (root, args) => {
     return fetchByURL(`/fields`);
 };
-
 
 // Collections
 const collections = (root, args) => {
@@ -50,9 +47,8 @@ const collection = (root, args) => {
 };
 
 const collectionProjects = (root, args) => {
-    fetchByURL(`/collections/${args.id}/projects`);
+    return fetchByURL(`/collections/${args.id}/projects`);
 };
-
 
 // Users
 const users = (root, args) => {
@@ -83,7 +79,6 @@ const userStats = (root, args) => {
     return fetchByURL(`/users/${args.id}/stats`);
 };
 
-
 module.exports = {
     project,
     projects,
@@ -101,4 +96,3 @@ module.exports = {
     userCollections,
     userStats
 };
-
