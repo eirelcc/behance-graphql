@@ -1,4 +1,4 @@
-# import Appreciation, Collection, Comment, Field, Link, Project, User, Wip from "./generated/prisma.graphql"
+# import Appreciation, Collection, Comment, Field, Link, Project, User, UserStatsByPeriod, Wip from "./generated/prisma.graphql"
 
 type Query {
     projects(params: ProjectsInput): [Project!]!
@@ -15,6 +15,7 @@ type Query {
     userWips(id: ID!, params: UserProjectsInput): [Wip!]
     userAppreciations(id: ID!, params: UserAppreciationsInput): [Appreciation!]
     userCollections(id: ID!, params: UserCollectionsInput): [Collection!]
+    userStats(id: ID!): UserStatsByPeriod!
 }
 
 type Mutation {

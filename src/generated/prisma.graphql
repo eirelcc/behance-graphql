@@ -137,6 +137,14 @@ type AggregateUser {
   count: Int!
 }
 
+type AggregateUserStats {
+  count: Int!
+}
+
+type AggregateUserStatsByPeriod {
+  count: Int!
+}
+
 type AggregateWip {
   count: Int!
 }
@@ -1411,6 +1419,8 @@ type Mutation {
   createAppreciation(data: AppreciationCreateInput!): Appreciation!
   createRevisionImageCollection(data: RevisionImageCollectionCreateInput!): RevisionImageCollection!
   createRevisionImage(data: RevisionImageCreateInput!): RevisionImage!
+  createUserStatsByPeriod(data: UserStatsByPeriodCreateInput!): UserStatsByPeriod!
+  createUserStats(data: UserStatsCreateInput!): UserStats!
   createLink(data: LinkCreateInput!): Link!
   createProjectsStats(data: ProjectsStatsCreateInput!): ProjectsStats!
   createCollectionStats(data: CollectionStatsCreateInput!): CollectionStats!
@@ -1447,6 +1457,8 @@ type Mutation {
   updateManyAppreciations(data: AppreciationUpdateInput!, where: AppreciationWhereInput!): BatchPayload!
   updateManyRevisionImageCollections(data: RevisionImageCollectionUpdateInput!, where: RevisionImageCollectionWhereInput!): BatchPayload!
   updateManyRevisionImages(data: RevisionImageUpdateInput!, where: RevisionImageWhereInput!): BatchPayload!
+  updateManyUserStatsByPeriods(data: UserStatsByPeriodUpdateInput!, where: UserStatsByPeriodWhereInput!): BatchPayload!
+  updateManyUserStatses(data: UserStatsUpdateInput!, where: UserStatsWhereInput!): BatchPayload!
   updateManyLinks(data: LinkUpdateInput!, where: LinkWhereInput!): BatchPayload!
   updateManyProjectsStatses(data: ProjectsStatsUpdateInput!, where: ProjectsStatsWhereInput!): BatchPayload!
   updateManyCollectionStatses(data: CollectionStatsUpdateInput!, where: CollectionStatsWhereInput!): BatchPayload!
@@ -1462,6 +1474,8 @@ type Mutation {
   deleteManyAppreciations(where: AppreciationWhereInput!): BatchPayload!
   deleteManyRevisionImageCollections(where: RevisionImageCollectionWhereInput!): BatchPayload!
   deleteManyRevisionImages(where: RevisionImageWhereInput!): BatchPayload!
+  deleteManyUserStatsByPeriods(where: UserStatsByPeriodWhereInput!): BatchPayload!
+  deleteManyUserStatses(where: UserStatsWhereInput!): BatchPayload!
   deleteManyLinks(where: LinkWhereInput!): BatchPayload!
   deleteManyProjectsStatses(where: ProjectsStatsWhereInput!): BatchPayload!
   deleteManyCollectionStatses(where: CollectionStatsWhereInput!): BatchPayload!
@@ -2201,6 +2215,8 @@ type Query {
   appreciations(where: AppreciationWhereInput, orderBy: AppreciationOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Appreciation]!
   revisionImageCollections(where: RevisionImageCollectionWhereInput, orderBy: RevisionImageCollectionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [RevisionImageCollection]!
   revisionImages(where: RevisionImageWhereInput, orderBy: RevisionImageOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [RevisionImage]!
+  userStatsByPeriods(where: UserStatsByPeriodWhereInput, orderBy: UserStatsByPeriodOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [UserStatsByPeriod]!
+  userStatses(where: UserStatsWhereInput, orderBy: UserStatsOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [UserStats]!
   links(where: LinkWhereInput, orderBy: LinkOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Link]!
   projectsStatses(where: ProjectsStatsWhereInput, orderBy: ProjectsStatsOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [ProjectsStats]!
   collectionStatses(where: CollectionStatsWhereInput, orderBy: CollectionStatsOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [CollectionStats]!
@@ -2223,6 +2239,8 @@ type Query {
   appreciationsConnection(where: AppreciationWhereInput, orderBy: AppreciationOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): AppreciationConnection!
   revisionImageCollectionsConnection(where: RevisionImageCollectionWhereInput, orderBy: RevisionImageCollectionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): RevisionImageCollectionConnection!
   revisionImagesConnection(where: RevisionImageWhereInput, orderBy: RevisionImageOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): RevisionImageConnection!
+  userStatsByPeriodsConnection(where: UserStatsByPeriodWhereInput, orderBy: UserStatsByPeriodOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserStatsByPeriodConnection!
+  userStatsesConnection(where: UserStatsWhereInput, orderBy: UserStatsOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserStatsConnection!
   linksConnection(where: LinkWhereInput, orderBy: LinkOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): LinkConnection!
   projectsStatsesConnection(where: ProjectsStatsWhereInput, orderBy: ProjectsStatsOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ProjectsStatsConnection!
   collectionStatsesConnection(where: CollectionStatsWhereInput, orderBy: CollectionStatsOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): CollectionStatsConnection!
@@ -3166,6 +3184,8 @@ type Subscription {
   appreciation(where: AppreciationSubscriptionWhereInput): AppreciationSubscriptionPayload
   revisionImageCollection(where: RevisionImageCollectionSubscriptionWhereInput): RevisionImageCollectionSubscriptionPayload
   revisionImage(where: RevisionImageSubscriptionWhereInput): RevisionImageSubscriptionPayload
+  userStatsByPeriod(where: UserStatsByPeriodSubscriptionWhereInput): UserStatsByPeriodSubscriptionPayload
+  userStats(where: UserStatsSubscriptionWhereInput): UserStatsSubscriptionPayload
   link(where: LinkSubscriptionWhereInput): LinkSubscriptionPayload
   projectsStats(where: ProjectsStatsSubscriptionWhereInput): ProjectsStatsSubscriptionPayload
   collectionStats(where: CollectionStatsSubscriptionWhereInput): CollectionStatsSubscriptionPayload
@@ -3604,6 +3624,425 @@ type UserPreviousValues {
   url: String!
   display_name: String!
   fields: [String!]
+}
+
+type UserStats {
+  project_views: Int!
+  project_appreciations: Int!
+  project_comments: Int!
+  profile_views: Int!
+}
+
+type UserStatsByPeriod {
+  all_time(where: UserStatsWhereInput): UserStats!
+  description: String
+}
+
+"""
+A connection to a list of items.
+"""
+type UserStatsByPeriodConnection {
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  """
+  A list of edges.
+  """
+  edges: [UserStatsByPeriodEdge]!
+  aggregate: AggregateUserStatsByPeriod!
+}
+
+input UserStatsByPeriodCreateInput {
+  description: String
+  all_time: UserStatsCreateOneInput!
+}
+
+"""
+An edge in a connection.
+"""
+type UserStatsByPeriodEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: UserStatsByPeriod!
+  """
+  A cursor for use in pagination.
+  """
+  cursor: String!
+}
+
+enum UserStatsByPeriodOrderByInput {
+  description_ASC
+  description_DESC
+  id_ASC
+  id_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  createdAt_ASC
+  createdAt_DESC
+}
+
+type UserStatsByPeriodPreviousValues {
+  description: String
+}
+
+type UserStatsByPeriodSubscriptionPayload {
+  mutation: MutationType!
+  node: UserStatsByPeriod
+  updatedFields: [String!]
+  previousValues: UserStatsByPeriodPreviousValues
+}
+
+input UserStatsByPeriodSubscriptionWhereInput {
+  """
+  Logical AND on all given filters.
+  """
+  AND: [UserStatsByPeriodSubscriptionWhereInput!]
+  """
+  Logical OR on all given filters.
+  """
+  OR: [UserStatsByPeriodSubscriptionWhereInput!]
+  """
+  The subscription event gets dispatched when it's listed in mutation_in
+  """
+  mutation_in: [MutationType!]
+  """
+  The subscription event gets only dispatched when one of the updated fields names is included in this list
+  """
+  updatedFields_contains: String
+  """
+  The subscription event gets only dispatched when all of the field names included in this list have been updated
+  """
+  updatedFields_contains_every: [String!]
+  """
+  The subscription event gets only dispatched when some of the field names included in this list have been updated
+  """
+  updatedFields_contains_some: [String!]
+  node: UserStatsByPeriodWhereInput
+}
+
+input UserStatsByPeriodUpdateInput {
+  description: String
+  all_time: UserStatsUpdateOneInput
+}
+
+input UserStatsByPeriodWhereInput {
+  """
+  Logical AND on all given filters.
+  """
+  AND: [UserStatsByPeriodWhereInput!]
+  """
+  Logical OR on all given filters.
+  """
+  OR: [UserStatsByPeriodWhereInput!]
+  description: String
+  """
+  All values that are not equal to given value.
+  """
+  description_not: String
+  """
+  All values that are contained in given list.
+  """
+  description_in: [String!]
+  """
+  All values that are not contained in given list.
+  """
+  description_not_in: [String!]
+  """
+  All values less than the given value.
+  """
+  description_lt: String
+  """
+  All values less than or equal the given value.
+  """
+  description_lte: String
+  """
+  All values greater than the given value.
+  """
+  description_gt: String
+  """
+  All values greater than or equal the given value.
+  """
+  description_gte: String
+  """
+  All values containing the given string.
+  """
+  description_contains: String
+  """
+  All values not containing the given string.
+  """
+  description_not_contains: String
+  """
+  All values starting with the given string.
+  """
+  description_starts_with: String
+  """
+  All values not starting with the given string.
+  """
+  description_not_starts_with: String
+  """
+  All values ending with the given string.
+  """
+  description_ends_with: String
+  """
+  All values not ending with the given string.
+  """
+  description_not_ends_with: String
+  all_time: UserStatsWhereInput
+}
+
+"""
+A connection to a list of items.
+"""
+type UserStatsConnection {
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  """
+  A list of edges.
+  """
+  edges: [UserStatsEdge]!
+  aggregate: AggregateUserStats!
+}
+
+input UserStatsCreateInput {
+  project_views: Int!
+  project_appreciations: Int!
+  project_comments: Int!
+  profile_views: Int!
+}
+
+input UserStatsCreateOneInput {
+  create: UserStatsCreateInput
+}
+
+"""
+An edge in a connection.
+"""
+type UserStatsEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: UserStats!
+  """
+  A cursor for use in pagination.
+  """
+  cursor: String!
+}
+
+enum UserStatsOrderByInput {
+  project_views_ASC
+  project_views_DESC
+  project_appreciations_ASC
+  project_appreciations_DESC
+  project_comments_ASC
+  project_comments_DESC
+  profile_views_ASC
+  profile_views_DESC
+  id_ASC
+  id_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  createdAt_ASC
+  createdAt_DESC
+}
+
+type UserStatsPreviousValues {
+  project_views: Int!
+  project_appreciations: Int!
+  project_comments: Int!
+  profile_views: Int!
+}
+
+type UserStatsSubscriptionPayload {
+  mutation: MutationType!
+  node: UserStats
+  updatedFields: [String!]
+  previousValues: UserStatsPreviousValues
+}
+
+input UserStatsSubscriptionWhereInput {
+  """
+  Logical AND on all given filters.
+  """
+  AND: [UserStatsSubscriptionWhereInput!]
+  """
+  Logical OR on all given filters.
+  """
+  OR: [UserStatsSubscriptionWhereInput!]
+  """
+  The subscription event gets dispatched when it's listed in mutation_in
+  """
+  mutation_in: [MutationType!]
+  """
+  The subscription event gets only dispatched when one of the updated fields names is included in this list
+  """
+  updatedFields_contains: String
+  """
+  The subscription event gets only dispatched when all of the field names included in this list have been updated
+  """
+  updatedFields_contains_every: [String!]
+  """
+  The subscription event gets only dispatched when some of the field names included in this list have been updated
+  """
+  updatedFields_contains_some: [String!]
+  node: UserStatsWhereInput
+}
+
+input UserStatsUpdateDataInput {
+  project_views: Int
+  project_appreciations: Int
+  project_comments: Int
+  profile_views: Int
+}
+
+input UserStatsUpdateInput {
+  project_views: Int
+  project_appreciations: Int
+  project_comments: Int
+  profile_views: Int
+}
+
+input UserStatsUpdateOneInput {
+  create: UserStatsCreateInput
+  disconnect: Boolean
+  delete: Boolean
+  update: UserStatsUpdateDataInput
+  upsert: UserStatsUpsertNestedInput
+}
+
+input UserStatsUpsertNestedInput {
+  update: UserStatsUpdateDataInput!
+  create: UserStatsCreateInput!
+}
+
+input UserStatsWhereInput {
+  """
+  Logical AND on all given filters.
+  """
+  AND: [UserStatsWhereInput!]
+  """
+  Logical OR on all given filters.
+  """
+  OR: [UserStatsWhereInput!]
+  project_views: Int
+  """
+  All values that are not equal to given value.
+  """
+  project_views_not: Int
+  """
+  All values that are contained in given list.
+  """
+  project_views_in: [Int!]
+  """
+  All values that are not contained in given list.
+  """
+  project_views_not_in: [Int!]
+  """
+  All values less than the given value.
+  """
+  project_views_lt: Int
+  """
+  All values less than or equal the given value.
+  """
+  project_views_lte: Int
+  """
+  All values greater than the given value.
+  """
+  project_views_gt: Int
+  """
+  All values greater than or equal the given value.
+  """
+  project_views_gte: Int
+  project_appreciations: Int
+  """
+  All values that are not equal to given value.
+  """
+  project_appreciations_not: Int
+  """
+  All values that are contained in given list.
+  """
+  project_appreciations_in: [Int!]
+  """
+  All values that are not contained in given list.
+  """
+  project_appreciations_not_in: [Int!]
+  """
+  All values less than the given value.
+  """
+  project_appreciations_lt: Int
+  """
+  All values less than or equal the given value.
+  """
+  project_appreciations_lte: Int
+  """
+  All values greater than the given value.
+  """
+  project_appreciations_gt: Int
+  """
+  All values greater than or equal the given value.
+  """
+  project_appreciations_gte: Int
+  project_comments: Int
+  """
+  All values that are not equal to given value.
+  """
+  project_comments_not: Int
+  """
+  All values that are contained in given list.
+  """
+  project_comments_in: [Int!]
+  """
+  All values that are not contained in given list.
+  """
+  project_comments_not_in: [Int!]
+  """
+  All values less than the given value.
+  """
+  project_comments_lt: Int
+  """
+  All values less than or equal the given value.
+  """
+  project_comments_lte: Int
+  """
+  All values greater than the given value.
+  """
+  project_comments_gt: Int
+  """
+  All values greater than or equal the given value.
+  """
+  project_comments_gte: Int
+  profile_views: Int
+  """
+  All values that are not equal to given value.
+  """
+  profile_views_not: Int
+  """
+  All values that are contained in given list.
+  """
+  profile_views_in: [Int!]
+  """
+  All values that are not contained in given list.
+  """
+  profile_views_not_in: [Int!]
+  """
+  All values less than the given value.
+  """
+  profile_views_lt: Int
+  """
+  All values less than or equal the given value.
+  """
+  profile_views_lte: Int
+  """
+  All values greater than the given value.
+  """
+  profile_views_gt: Int
+  """
+  All values greater than or equal the given value.
+  """
+  profile_views_gte: Int
 }
 
 type UserSubscriptionPayload {

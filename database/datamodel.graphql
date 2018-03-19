@@ -81,6 +81,19 @@ type RevisionImage {
     width: Int!
 }
 
+type UserStatsByPeriod {
+    # today: UserStats!
+    all_time: UserStats!
+    description: String
+}
+
+type UserStats {
+    project_views: Int!
+    project_appreciations: Int!
+    project_comments: Int!
+    profile_views: Int!
+}
+
 type Link {
     title: String!
     url: String!
