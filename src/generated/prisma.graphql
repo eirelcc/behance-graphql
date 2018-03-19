@@ -153,6 +153,10 @@ type AggregateWipStats {
   count: Int!
 }
 
+type AggregateWorkExperience {
+  count: Int!
+}
+
 type Appreciation {
   project(where: ProjectWhereInput): Project!
   timestamp: Int!
@@ -1426,6 +1430,7 @@ type Mutation {
   createCollectionStats(data: CollectionStatsCreateInput!): CollectionStats!
   createWipStats(data: WipStatsCreateInput!): WipStats!
   createComment(data: CommentCreateInput!): Comment!
+  createWorkExperience(data: WorkExperienceCreateInput!): WorkExperience!
   createField(data: FieldCreateInput!): Field!
   createSU(data: SUCreateInput!): SU!
   updateProject(data: ProjectUpdateInput!, where: ProjectWhereUniqueInput!): Project
@@ -1464,6 +1469,7 @@ type Mutation {
   updateManyCollectionStatses(data: CollectionStatsUpdateInput!, where: CollectionStatsWhereInput!): BatchPayload!
   updateManyWipStatses(data: WipStatsUpdateInput!, where: WipStatsWhereInput!): BatchPayload!
   updateManyComments(data: CommentUpdateInput!, where: CommentWhereInput!): BatchPayload!
+  updateManyWorkExperiences(data: WorkExperienceUpdateInput!, where: WorkExperienceWhereInput!): BatchPayload!
   updateManyFields(data: FieldUpdateInput!, where: FieldWhereInput!): BatchPayload!
   updateManySUs(data: SUUpdateInput!, where: SUWhereInput!): BatchPayload!
   deleteManyProjects(where: ProjectWhereInput!): BatchPayload!
@@ -1481,6 +1487,7 @@ type Mutation {
   deleteManyCollectionStatses(where: CollectionStatsWhereInput!): BatchPayload!
   deleteManyWipStatses(where: WipStatsWhereInput!): BatchPayload!
   deleteManyComments(where: CommentWhereInput!): BatchPayload!
+  deleteManyWorkExperiences(where: WorkExperienceWhereInput!): BatchPayload!
   deleteManyFields(where: FieldWhereInput!): BatchPayload!
   deleteManySUs(where: SUWhereInput!): BatchPayload!
 }
@@ -2222,6 +2229,7 @@ type Query {
   collectionStatses(where: CollectionStatsWhereInput, orderBy: CollectionStatsOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [CollectionStats]!
   wipStatses(where: WipStatsWhereInput, orderBy: WipStatsOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [WipStats]!
   comments(where: CommentWhereInput, orderBy: CommentOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Comment]!
+  workExperiences(where: WorkExperienceWhereInput, orderBy: WorkExperienceOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [WorkExperience]!
   fields(where: FieldWhereInput, orderBy: FieldOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Field]!
   sUs(where: SUWhereInput, orderBy: SUOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [SU]!
   project(where: ProjectWhereUniqueInput!): Project
@@ -2246,6 +2254,7 @@ type Query {
   collectionStatsesConnection(where: CollectionStatsWhereInput, orderBy: CollectionStatsOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): CollectionStatsConnection!
   wipStatsesConnection(where: WipStatsWhereInput, orderBy: WipStatsOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): WipStatsConnection!
   commentsConnection(where: CommentWhereInput, orderBy: CommentOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): CommentConnection!
+  workExperiencesConnection(where: WorkExperienceWhereInput, orderBy: WorkExperienceOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): WorkExperienceConnection!
   fieldsConnection(where: FieldWhereInput, orderBy: FieldOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): FieldConnection!
   sUsConnection(where: SUWhereInput, orderBy: SUOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): SUConnection!
   """
@@ -3191,6 +3200,7 @@ type Subscription {
   collectionStats(where: CollectionStatsSubscriptionWhereInput): CollectionStatsSubscriptionPayload
   wipStats(where: WipStatsSubscriptionWhereInput): WipStatsSubscriptionPayload
   comment(where: CommentSubscriptionWhereInput): CommentSubscriptionPayload
+  workExperience(where: WorkExperienceSubscriptionWhereInput): WorkExperienceSubscriptionPayload
   field(where: FieldSubscriptionWhereInput): FieldSubscriptionPayload
   sU(where: SUSubscriptionWhereInput): SUSubscriptionPayload
 }
@@ -5367,4 +5377,277 @@ input WipWhereInput {
 
 input WipWhereUniqueInput {
   id: ID
+}
+
+type WorkExperience {
+  position: String!
+  organization: String!
+  location: String!
+}
+
+"""
+A connection to a list of items.
+"""
+type WorkExperienceConnection {
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  """
+  A list of edges.
+  """
+  edges: [WorkExperienceEdge]!
+  aggregate: AggregateWorkExperience!
+}
+
+input WorkExperienceCreateInput {
+  position: String!
+  organization: String!
+  location: String!
+}
+
+"""
+An edge in a connection.
+"""
+type WorkExperienceEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: WorkExperience!
+  """
+  A cursor for use in pagination.
+  """
+  cursor: String!
+}
+
+enum WorkExperienceOrderByInput {
+  position_ASC
+  position_DESC
+  organization_ASC
+  organization_DESC
+  location_ASC
+  location_DESC
+  id_ASC
+  id_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  createdAt_ASC
+  createdAt_DESC
+}
+
+type WorkExperiencePreviousValues {
+  position: String!
+  organization: String!
+  location: String!
+}
+
+type WorkExperienceSubscriptionPayload {
+  mutation: MutationType!
+  node: WorkExperience
+  updatedFields: [String!]
+  previousValues: WorkExperiencePreviousValues
+}
+
+input WorkExperienceSubscriptionWhereInput {
+  """
+  Logical AND on all given filters.
+  """
+  AND: [WorkExperienceSubscriptionWhereInput!]
+  """
+  Logical OR on all given filters.
+  """
+  OR: [WorkExperienceSubscriptionWhereInput!]
+  """
+  The subscription event gets dispatched when it's listed in mutation_in
+  """
+  mutation_in: [MutationType!]
+  """
+  The subscription event gets only dispatched when one of the updated fields names is included in this list
+  """
+  updatedFields_contains: String
+  """
+  The subscription event gets only dispatched when all of the field names included in this list have been updated
+  """
+  updatedFields_contains_every: [String!]
+  """
+  The subscription event gets only dispatched when some of the field names included in this list have been updated
+  """
+  updatedFields_contains_some: [String!]
+  node: WorkExperienceWhereInput
+}
+
+input WorkExperienceUpdateInput {
+  position: String
+  organization: String
+  location: String
+}
+
+input WorkExperienceWhereInput {
+  """
+  Logical AND on all given filters.
+  """
+  AND: [WorkExperienceWhereInput!]
+  """
+  Logical OR on all given filters.
+  """
+  OR: [WorkExperienceWhereInput!]
+  position: String
+  """
+  All values that are not equal to given value.
+  """
+  position_not: String
+  """
+  All values that are contained in given list.
+  """
+  position_in: [String!]
+  """
+  All values that are not contained in given list.
+  """
+  position_not_in: [String!]
+  """
+  All values less than the given value.
+  """
+  position_lt: String
+  """
+  All values less than or equal the given value.
+  """
+  position_lte: String
+  """
+  All values greater than the given value.
+  """
+  position_gt: String
+  """
+  All values greater than or equal the given value.
+  """
+  position_gte: String
+  """
+  All values containing the given string.
+  """
+  position_contains: String
+  """
+  All values not containing the given string.
+  """
+  position_not_contains: String
+  """
+  All values starting with the given string.
+  """
+  position_starts_with: String
+  """
+  All values not starting with the given string.
+  """
+  position_not_starts_with: String
+  """
+  All values ending with the given string.
+  """
+  position_ends_with: String
+  """
+  All values not ending with the given string.
+  """
+  position_not_ends_with: String
+  organization: String
+  """
+  All values that are not equal to given value.
+  """
+  organization_not: String
+  """
+  All values that are contained in given list.
+  """
+  organization_in: [String!]
+  """
+  All values that are not contained in given list.
+  """
+  organization_not_in: [String!]
+  """
+  All values less than the given value.
+  """
+  organization_lt: String
+  """
+  All values less than or equal the given value.
+  """
+  organization_lte: String
+  """
+  All values greater than the given value.
+  """
+  organization_gt: String
+  """
+  All values greater than or equal the given value.
+  """
+  organization_gte: String
+  """
+  All values containing the given string.
+  """
+  organization_contains: String
+  """
+  All values not containing the given string.
+  """
+  organization_not_contains: String
+  """
+  All values starting with the given string.
+  """
+  organization_starts_with: String
+  """
+  All values not starting with the given string.
+  """
+  organization_not_starts_with: String
+  """
+  All values ending with the given string.
+  """
+  organization_ends_with: String
+  """
+  All values not ending with the given string.
+  """
+  organization_not_ends_with: String
+  location: String
+  """
+  All values that are not equal to given value.
+  """
+  location_not: String
+  """
+  All values that are contained in given list.
+  """
+  location_in: [String!]
+  """
+  All values that are not contained in given list.
+  """
+  location_not_in: [String!]
+  """
+  All values less than the given value.
+  """
+  location_lt: String
+  """
+  All values less than or equal the given value.
+  """
+  location_lte: String
+  """
+  All values greater than the given value.
+  """
+  location_gt: String
+  """
+  All values greater than or equal the given value.
+  """
+  location_gte: String
+  """
+  All values containing the given string.
+  """
+  location_contains: String
+  """
+  All values not containing the given string.
+  """
+  location_not_contains: String
+  """
+  All values starting with the given string.
+  """
+  location_starts_with: String
+  """
+  All values not starting with the given string.
+  """
+  location_not_starts_with: String
+  """
+  All values ending with the given string.
+  """
+  location_ends_with: String
+  """
+  All values not ending with the given string.
+  """
+  location_not_ends_with: String
 }

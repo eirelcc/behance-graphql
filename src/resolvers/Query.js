@@ -79,6 +79,19 @@ const userStats = (root, args) => {
     return fetchByURL(`/users/${args.id}/stats`);
 };
 
+const userFollowers = (root, args) => {
+    return fetchByURL(`/users/${args.id}/followers`, args.params);
+};
+
+const userFollowing = (root, args) => {
+    return fetchByURL(`/users/${args.id}/following`, args.params);
+};
+
+const userWorkExperience = (root, args) => {
+    const data = fetchByURL(`/users/${args.id}/work_experience`);
+    return Array.isArray(data) ? data : [];
+};
+
 module.exports = {
     project,
     projects,
@@ -94,5 +107,8 @@ module.exports = {
     userWips,
     userAppreciations,
     userCollections,
-    userStats
+    userStats,
+    userFollowers,
+    userFollowing,
+    userWorkExperience
 };

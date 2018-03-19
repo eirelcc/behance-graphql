@@ -122,6 +122,12 @@ type Comment {
     created_on: Int!
 }
 
+type WorkExperience {
+    position: String!
+    organization: String!
+    location: String!
+}
+
 type Field {
     id: ID! @unique
     name: String!

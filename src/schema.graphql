@@ -1,4 +1,4 @@
-# import Appreciation, Collection, Comment, Field, Link, Project, User, UserStatsByPeriod, Wip from "./generated/prisma.graphql"
+# import Appreciation, Collection, Comment, Field, Link, Project, User, UserStatsByPeriod, Wip, WorkExperience from "./generated/prisma.graphql"
 
 type Query {
     projects(params: ProjectsInput): [Project!]!
@@ -16,6 +16,9 @@ type Query {
     userAppreciations(id: ID!, params: UserAppreciationsInput): [Appreciation!]
     userCollections(id: ID!, params: UserCollectionsInput): [Collection!]
     userStats(id: ID!): UserStatsByPeriod!
+    userFollowers(id: ID!, params: UserFollowersInput): [User!]
+    userFollowing(id: ID!, params: UserFollowersInput): [User!]
+    userWorkExperience(id: ID!): [WorkExperience!]
 }
 
 type Mutation {
@@ -89,6 +92,13 @@ input UserCollectionsInput {
     sort: CollectionSortBy
 }
 
+input UserFollowersInput {
+    page: String
+    sort: UserFollowerSortBy
+    sort_order: SortOrder
+    per_page: Int
+}
+
 input CollectionsInput {
     q: String
     time: Period
@@ -120,8 +130,22 @@ enum UserSortBy {
     followed
 }
 
+enum UserFollowerSortBy {
+    created_date
+    appreciations
+    views
+    comments
+    followed
+    alpha
+}
+
 enum CollectionSortBy {
     comments
     views
     last_item_added_date
+}
+
+enum SortOrder {
+    asc
+    desc
 }
