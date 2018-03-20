@@ -1,4 +1,5 @@
 const { fetchByURL } = require('../utils');
+const { images } = require('./shared');
 
 const projects = (user, args) =>
     fetchByURL(`/users/${user.id}/projects`, args.params);
@@ -24,8 +25,17 @@ const workExperience = async user => {
     return Array.isArray(data) ? data : [];
 };
 
+const sections = user => {
+    return Object.entries(user.sections).map(([title, text]) => ({
+        title,
+        text
+    }));
+};
+
 module.exports = {
     projects,
+    images,
+    sections,
     wips,
     appreciations,
     collections,
