@@ -37,9 +37,11 @@ type User {
     url: String!
     display_name: String!
     fields: [String!]!
+    images: [String!]!
 
     twitter: String
     links: [Link!]!
+    sections: [Section!]!
 
     projects(params: UserProjectsInput): [Project!]!
     wips(params: UserProjectsInput): [Wip!]!
@@ -58,7 +60,7 @@ type Collection {
     title: String!
     owners: [User!]!
     stats: CollectionStats!
-    images: [String!]
+    images: [String!]!
     created_on: Int!
     modified_on: Int!
     projects: [Project!]!
@@ -81,15 +83,6 @@ type Appreciation {
     timestamp: Int!
 }
 
-# https://github.com/graphcool/prisma/issues/1981
-type RevisionImageCollection {
-    description: String
-    high_definition: RevisionImage!
-    # normal_resolution: RevisionImage!
-    # thumbnail: RevisionImage!
-    # thumbnail_sm: RevisionImage!
-}
-
 type RevisionImage {
     url: String!
     height: Int!
@@ -107,6 +100,11 @@ type UserStats {
     project_appreciations: Int!
     project_comments: Int!
     profile_views: Int!
+}
+
+type Section {
+    title: String!
+    text: String!
 }
 
 type Link {

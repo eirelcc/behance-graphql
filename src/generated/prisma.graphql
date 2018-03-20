@@ -68,8 +68,10 @@ type User implements Node {
   url: String!
   display_name: String!
   fields: [String!]
+  images: [String!]
   twitter: String
   links(where: LinkWhereInput, orderBy: LinkOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Link!]
+  sections(where: SectionWhereInput, orderBy: SectionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Section!]
   projects(where: ProjectWhereInput, orderBy: ProjectOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Project!]
   wips(where: WipWhereInput, orderBy: WipOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Wip!]
   appreciations(where: AppreciationWhereInput, orderBy: AppreciationOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Appreciation!]
@@ -136,7 +138,7 @@ type AggregateRevisionImage {
   count: Int!
 }
 
-type AggregateRevisionImageCollection {
+type AggregateSection {
   count: Int!
 }
 
@@ -1496,10 +1498,10 @@ type Mutation {
   createCollection(data: CollectionCreateInput!): Collection!
   createRevision(data: RevisionCreateInput!): Revision!
   createAppreciation(data: AppreciationCreateInput!): Appreciation!
-  createRevisionImageCollection(data: RevisionImageCollectionCreateInput!): RevisionImageCollection!
   createRevisionImage(data: RevisionImageCreateInput!): RevisionImage!
   createUserStatsByPeriod(data: UserStatsByPeriodCreateInput!): UserStatsByPeriod!
   createUserStats(data: UserStatsCreateInput!): UserStats!
+  createSection(data: SectionCreateInput!): Section!
   createLink(data: LinkCreateInput!): Link!
   createProjectsStats(data: ProjectsStatsCreateInput!): ProjectsStats!
   createCollectionStats(data: CollectionStatsCreateInput!): CollectionStats!
@@ -1535,10 +1537,10 @@ type Mutation {
   updateManyCollections(data: CollectionUpdateInput!, where: CollectionWhereInput!): BatchPayload!
   updateManyRevisions(data: RevisionUpdateInput!, where: RevisionWhereInput!): BatchPayload!
   updateManyAppreciations(data: AppreciationUpdateInput!, where: AppreciationWhereInput!): BatchPayload!
-  updateManyRevisionImageCollections(data: RevisionImageCollectionUpdateInput!, where: RevisionImageCollectionWhereInput!): BatchPayload!
   updateManyRevisionImages(data: RevisionImageUpdateInput!, where: RevisionImageWhereInput!): BatchPayload!
   updateManyUserStatsByPeriods(data: UserStatsByPeriodUpdateInput!, where: UserStatsByPeriodWhereInput!): BatchPayload!
   updateManyUserStatses(data: UserStatsUpdateInput!, where: UserStatsWhereInput!): BatchPayload!
+  updateManySections(data: SectionUpdateInput!, where: SectionWhereInput!): BatchPayload!
   updateManyLinks(data: LinkUpdateInput!, where: LinkWhereInput!): BatchPayload!
   updateManyProjectsStatses(data: ProjectsStatsUpdateInput!, where: ProjectsStatsWhereInput!): BatchPayload!
   updateManyCollectionStatses(data: CollectionStatsUpdateInput!, where: CollectionStatsWhereInput!): BatchPayload!
@@ -1553,10 +1555,10 @@ type Mutation {
   deleteManyCollections(where: CollectionWhereInput!): BatchPayload!
   deleteManyRevisions(where: RevisionWhereInput!): BatchPayload!
   deleteManyAppreciations(where: AppreciationWhereInput!): BatchPayload!
-  deleteManyRevisionImageCollections(where: RevisionImageCollectionWhereInput!): BatchPayload!
   deleteManyRevisionImages(where: RevisionImageWhereInput!): BatchPayload!
   deleteManyUserStatsByPeriods(where: UserStatsByPeriodWhereInput!): BatchPayload!
   deleteManyUserStatses(where: UserStatsWhereInput!): BatchPayload!
+  deleteManySections(where: SectionWhereInput!): BatchPayload!
   deleteManyLinks(where: LinkWhereInput!): BatchPayload!
   deleteManyProjectsStatses(where: ProjectsStatsWhereInput!): BatchPayload!
   deleteManyCollectionStatses(where: CollectionStatsWhereInput!): BatchPayload!
@@ -2369,10 +2371,10 @@ type Query {
   collections(where: CollectionWhereInput, orderBy: CollectionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Collection]!
   revisions(where: RevisionWhereInput, orderBy: RevisionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Revision]!
   appreciations(where: AppreciationWhereInput, orderBy: AppreciationOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Appreciation]!
-  revisionImageCollections(where: RevisionImageCollectionWhereInput, orderBy: RevisionImageCollectionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [RevisionImageCollection]!
   revisionImages(where: RevisionImageWhereInput, orderBy: RevisionImageOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [RevisionImage]!
   userStatsByPeriods(where: UserStatsByPeriodWhereInput, orderBy: UserStatsByPeriodOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [UserStatsByPeriod]!
   userStatses(where: UserStatsWhereInput, orderBy: UserStatsOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [UserStats]!
+  sections(where: SectionWhereInput, orderBy: SectionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Section]!
   links(where: LinkWhereInput, orderBy: LinkOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Link]!
   projectsStatses(where: ProjectsStatsWhereInput, orderBy: ProjectsStatsOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [ProjectsStats]!
   collectionStatses(where: CollectionStatsWhereInput, orderBy: CollectionStatsOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [CollectionStats]!
@@ -2394,10 +2396,10 @@ type Query {
   collectionsConnection(where: CollectionWhereInput, orderBy: CollectionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): CollectionConnection!
   revisionsConnection(where: RevisionWhereInput, orderBy: RevisionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): RevisionConnection!
   appreciationsConnection(where: AppreciationWhereInput, orderBy: AppreciationOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): AppreciationConnection!
-  revisionImageCollectionsConnection(where: RevisionImageCollectionWhereInput, orderBy: RevisionImageCollectionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): RevisionImageCollectionConnection!
   revisionImagesConnection(where: RevisionImageWhereInput, orderBy: RevisionImageOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): RevisionImageConnection!
   userStatsByPeriodsConnection(where: UserStatsByPeriodWhereInput, orderBy: UserStatsByPeriodOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserStatsByPeriodConnection!
   userStatsesConnection(where: UserStatsWhereInput, orderBy: UserStatsOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserStatsConnection!
+  sectionsConnection(where: SectionWhereInput, orderBy: SectionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): SectionConnection!
   linksConnection(where: LinkWhereInput, orderBy: LinkOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): LinkConnection!
   projectsStatsesConnection(where: ProjectsStatsWhereInput, orderBy: ProjectsStatsOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ProjectsStatsConnection!
   collectionStatsesConnection(where: CollectionStatsWhereInput, orderBy: CollectionStatsOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): CollectionStatsConnection!
@@ -2470,165 +2472,6 @@ type RevisionImage {
   width: Int!
 }
 
-type RevisionImageCollection {
-  description: String
-  high_definition(where: RevisionImageWhereInput): RevisionImage!
-}
-
-"""
-A connection to a list of items.
-"""
-type RevisionImageCollectionConnection {
-  """
-  Information to aid in pagination.
-  """
-  pageInfo: PageInfo!
-  """
-  A list of edges.
-  """
-  edges: [RevisionImageCollectionEdge]!
-  aggregate: AggregateRevisionImageCollection!
-}
-
-input RevisionImageCollectionCreateInput {
-  description: String
-  high_definition: RevisionImageCreateOneInput!
-}
-
-"""
-An edge in a connection.
-"""
-type RevisionImageCollectionEdge {
-  """
-  The item at the end of the edge.
-  """
-  node: RevisionImageCollection!
-  """
-  A cursor for use in pagination.
-  """
-  cursor: String!
-}
-
-enum RevisionImageCollectionOrderByInput {
-  description_ASC
-  description_DESC
-  id_ASC
-  id_DESC
-  updatedAt_ASC
-  updatedAt_DESC
-  createdAt_ASC
-  createdAt_DESC
-}
-
-type RevisionImageCollectionPreviousValues {
-  description: String
-}
-
-type RevisionImageCollectionSubscriptionPayload {
-  mutation: MutationType!
-  node: RevisionImageCollection
-  updatedFields: [String!]
-  previousValues: RevisionImageCollectionPreviousValues
-}
-
-input RevisionImageCollectionSubscriptionWhereInput {
-  """
-  Logical AND on all given filters.
-  """
-  AND: [RevisionImageCollectionSubscriptionWhereInput!]
-  """
-  Logical OR on all given filters.
-  """
-  OR: [RevisionImageCollectionSubscriptionWhereInput!]
-  """
-  The subscription event gets dispatched when it's listed in mutation_in
-  """
-  mutation_in: [MutationType!]
-  """
-  The subscription event gets only dispatched when one of the updated fields names is included in this list
-  """
-  updatedFields_contains: String
-  """
-  The subscription event gets only dispatched when all of the field names included in this list have been updated
-  """
-  updatedFields_contains_every: [String!]
-  """
-  The subscription event gets only dispatched when some of the field names included in this list have been updated
-  """
-  updatedFields_contains_some: [String!]
-  node: RevisionImageCollectionWhereInput
-}
-
-input RevisionImageCollectionUpdateInput {
-  description: String
-  high_definition: RevisionImageUpdateOneInput
-}
-
-input RevisionImageCollectionWhereInput {
-  """
-  Logical AND on all given filters.
-  """
-  AND: [RevisionImageCollectionWhereInput!]
-  """
-  Logical OR on all given filters.
-  """
-  OR: [RevisionImageCollectionWhereInput!]
-  description: String
-  """
-  All values that are not equal to given value.
-  """
-  description_not: String
-  """
-  All values that are contained in given list.
-  """
-  description_in: [String!]
-  """
-  All values that are not contained in given list.
-  """
-  description_not_in: [String!]
-  """
-  All values less than the given value.
-  """
-  description_lt: String
-  """
-  All values less than or equal the given value.
-  """
-  description_lte: String
-  """
-  All values greater than the given value.
-  """
-  description_gt: String
-  """
-  All values greater than or equal the given value.
-  """
-  description_gte: String
-  """
-  All values containing the given string.
-  """
-  description_contains: String
-  """
-  All values not containing the given string.
-  """
-  description_not_contains: String
-  """
-  All values starting with the given string.
-  """
-  description_starts_with: String
-  """
-  All values not starting with the given string.
-  """
-  description_not_starts_with: String
-  """
-  All values ending with the given string.
-  """
-  description_ends_with: String
-  """
-  All values not ending with the given string.
-  """
-  description_not_ends_with: String
-  high_definition: RevisionImageWhereInput
-}
-
 """
 A connection to a list of items.
 """
@@ -2652,10 +2495,6 @@ input RevisionImageCreateInput {
 
 input RevisionImageCreateManyInput {
   create: [RevisionImageCreateInput!]
-}
-
-input RevisionImageCreateOneInput {
-  create: RevisionImageCreateInput
 }
 
 """
@@ -2728,12 +2567,6 @@ input RevisionImageSubscriptionWhereInput {
   node: RevisionImageWhereInput
 }
 
-input RevisionImageUpdateDataInput {
-  url: String
-  height: Int
-  width: Int
-}
-
 input RevisionImageUpdateInput {
   url: String
   height: Int
@@ -2742,19 +2575,6 @@ input RevisionImageUpdateInput {
 
 input RevisionImageUpdateManyInput {
   create: [RevisionImageCreateInput!]
-}
-
-input RevisionImageUpdateOneInput {
-  create: RevisionImageCreateInput
-  disconnect: Boolean
-  delete: Boolean
-  update: RevisionImageUpdateDataInput
-  upsert: RevisionImageUpsertNestedInput
-}
-
-input RevisionImageUpsertNestedInput {
-  update: RevisionImageUpdateDataInput!
-  create: RevisionImageCreateInput!
 }
 
 input RevisionImageWhereInput {
@@ -3333,6 +3153,228 @@ input RevisionWhereUniqueInput {
   id: ID
 }
 
+type Section {
+  title: String!
+  text: String!
+}
+
+"""
+A connection to a list of items.
+"""
+type SectionConnection {
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  """
+  A list of edges.
+  """
+  edges: [SectionEdge]!
+  aggregate: AggregateSection!
+}
+
+input SectionCreateInput {
+  title: String!
+  text: String!
+}
+
+input SectionCreateManyInput {
+  create: [SectionCreateInput!]
+}
+
+"""
+An edge in a connection.
+"""
+type SectionEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: Section!
+  """
+  A cursor for use in pagination.
+  """
+  cursor: String!
+}
+
+enum SectionOrderByInput {
+  title_ASC
+  title_DESC
+  text_ASC
+  text_DESC
+  id_ASC
+  id_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  createdAt_ASC
+  createdAt_DESC
+}
+
+type SectionPreviousValues {
+  title: String!
+  text: String!
+}
+
+type SectionSubscriptionPayload {
+  mutation: MutationType!
+  node: Section
+  updatedFields: [String!]
+  previousValues: SectionPreviousValues
+}
+
+input SectionSubscriptionWhereInput {
+  """
+  Logical AND on all given filters.
+  """
+  AND: [SectionSubscriptionWhereInput!]
+  """
+  Logical OR on all given filters.
+  """
+  OR: [SectionSubscriptionWhereInput!]
+  """
+  The subscription event gets dispatched when it's listed in mutation_in
+  """
+  mutation_in: [MutationType!]
+  """
+  The subscription event gets only dispatched when one of the updated fields names is included in this list
+  """
+  updatedFields_contains: String
+  """
+  The subscription event gets only dispatched when all of the field names included in this list have been updated
+  """
+  updatedFields_contains_every: [String!]
+  """
+  The subscription event gets only dispatched when some of the field names included in this list have been updated
+  """
+  updatedFields_contains_some: [String!]
+  node: SectionWhereInput
+}
+
+input SectionUpdateInput {
+  title: String
+  text: String
+}
+
+input SectionUpdateManyInput {
+  create: [SectionCreateInput!]
+}
+
+input SectionWhereInput {
+  """
+  Logical AND on all given filters.
+  """
+  AND: [SectionWhereInput!]
+  """
+  Logical OR on all given filters.
+  """
+  OR: [SectionWhereInput!]
+  title: String
+  """
+  All values that are not equal to given value.
+  """
+  title_not: String
+  """
+  All values that are contained in given list.
+  """
+  title_in: [String!]
+  """
+  All values that are not contained in given list.
+  """
+  title_not_in: [String!]
+  """
+  All values less than the given value.
+  """
+  title_lt: String
+  """
+  All values less than or equal the given value.
+  """
+  title_lte: String
+  """
+  All values greater than the given value.
+  """
+  title_gt: String
+  """
+  All values greater than or equal the given value.
+  """
+  title_gte: String
+  """
+  All values containing the given string.
+  """
+  title_contains: String
+  """
+  All values not containing the given string.
+  """
+  title_not_contains: String
+  """
+  All values starting with the given string.
+  """
+  title_starts_with: String
+  """
+  All values not starting with the given string.
+  """
+  title_not_starts_with: String
+  """
+  All values ending with the given string.
+  """
+  title_ends_with: String
+  """
+  All values not ending with the given string.
+  """
+  title_not_ends_with: String
+  text: String
+  """
+  All values that are not equal to given value.
+  """
+  text_not: String
+  """
+  All values that are contained in given list.
+  """
+  text_in: [String!]
+  """
+  All values that are not contained in given list.
+  """
+  text_not_in: [String!]
+  """
+  All values less than the given value.
+  """
+  text_lt: String
+  """
+  All values less than or equal the given value.
+  """
+  text_lte: String
+  """
+  All values greater than the given value.
+  """
+  text_gt: String
+  """
+  All values greater than or equal the given value.
+  """
+  text_gte: String
+  """
+  All values containing the given string.
+  """
+  text_contains: String
+  """
+  All values not containing the given string.
+  """
+  text_not_contains: String
+  """
+  All values starting with the given string.
+  """
+  text_starts_with: String
+  """
+  All values not starting with the given string.
+  """
+  text_not_starts_with: String
+  """
+  All values ending with the given string.
+  """
+  text_ends_with: String
+  """
+  All values not ending with the given string.
+  """
+  text_not_ends_with: String
+}
+
 type Subscription {
   project(where: ProjectSubscriptionWhereInput): ProjectSubscriptionPayload
   wip(where: WipSubscriptionWhereInput): WipSubscriptionPayload
@@ -3340,10 +3382,10 @@ type Subscription {
   collection(where: CollectionSubscriptionWhereInput): CollectionSubscriptionPayload
   revision(where: RevisionSubscriptionWhereInput): RevisionSubscriptionPayload
   appreciation(where: AppreciationSubscriptionWhereInput): AppreciationSubscriptionPayload
-  revisionImageCollection(where: RevisionImageCollectionSubscriptionWhereInput): RevisionImageCollectionSubscriptionPayload
   revisionImage(where: RevisionImageSubscriptionWhereInput): RevisionImageSubscriptionPayload
   userStatsByPeriod(where: UserStatsByPeriodSubscriptionWhereInput): UserStatsByPeriodSubscriptionPayload
   userStats(where: UserStatsSubscriptionWhereInput): UserStatsSubscriptionPayload
+  section(where: SectionSubscriptionWhereInput): SectionSubscriptionPayload
   link(where: LinkSubscriptionWhereInput): LinkSubscriptionPayload
   projectsStats(where: ProjectsStatsSubscriptionWhereInput): ProjectsStatsSubscriptionPayload
   collectionStats(where: CollectionStatsSubscriptionWhereInput): CollectionStatsSubscriptionPayload
@@ -3699,6 +3741,10 @@ input UserCreatefieldsInput {
   set: [String!]
 }
 
+input UserCreateimagesInput {
+  set: [String!]
+}
+
 input UserCreateInput {
   first_name: String!
   last_name: String!
@@ -3713,7 +3759,9 @@ input UserCreateInput {
   display_name: String!
   twitter: String
   fields: UserCreatefieldsInput
+  images: UserCreateimagesInput
   links: LinkCreateManyInput
+  sections: SectionCreateManyInput
   projects: ProjectCreateManyWithoutOwnersInput
   wips: WipCreateManyWithoutOwnerInput
   appreciations: AppreciationCreateManyInput
@@ -3768,7 +3816,9 @@ input UserCreateWithoutCollectionsInput {
   display_name: String!
   twitter: String
   fields: UserCreatefieldsInput
+  images: UserCreateimagesInput
   links: LinkCreateManyInput
+  sections: SectionCreateManyInput
   projects: ProjectCreateManyWithoutOwnersInput
   wips: WipCreateManyWithoutOwnerInput
   appreciations: AppreciationCreateManyInput
@@ -3792,7 +3842,9 @@ input UserCreateWithoutFollowersInput {
   display_name: String!
   twitter: String
   fields: UserCreatefieldsInput
+  images: UserCreateimagesInput
   links: LinkCreateManyInput
+  sections: SectionCreateManyInput
   projects: ProjectCreateManyWithoutOwnersInput
   wips: WipCreateManyWithoutOwnerInput
   appreciations: AppreciationCreateManyInput
@@ -3816,7 +3868,9 @@ input UserCreateWithoutFollowingInput {
   display_name: String!
   twitter: String
   fields: UserCreatefieldsInput
+  images: UserCreateimagesInput
   links: LinkCreateManyInput
+  sections: SectionCreateManyInput
   projects: ProjectCreateManyWithoutOwnersInput
   wips: WipCreateManyWithoutOwnerInput
   appreciations: AppreciationCreateManyInput
@@ -3840,7 +3894,9 @@ input UserCreateWithoutProjectsInput {
   display_name: String!
   twitter: String
   fields: UserCreatefieldsInput
+  images: UserCreateimagesInput
   links: LinkCreateManyInput
+  sections: SectionCreateManyInput
   wips: WipCreateManyWithoutOwnerInput
   appreciations: AppreciationCreateManyInput
   collections: CollectionCreateManyWithoutOwnersInput
@@ -3864,7 +3920,9 @@ input UserCreateWithoutWipsInput {
   display_name: String!
   twitter: String
   fields: UserCreatefieldsInput
+  images: UserCreateimagesInput
   links: LinkCreateManyInput
+  sections: SectionCreateManyInput
   projects: ProjectCreateManyWithoutOwnersInput
   appreciations: AppreciationCreateManyInput
   collections: CollectionCreateManyWithoutOwnersInput
@@ -3935,6 +3993,7 @@ type UserPreviousValues {
   url: String!
   display_name: String!
   fields: [String!]
+  images: [String!]
   twitter: String
 }
 
@@ -4428,7 +4487,9 @@ input UserUpdateDataInput {
   display_name: String
   twitter: String
   fields: UserUpdatefieldsInput
+  images: UserUpdateimagesInput
   links: LinkUpdateManyInput
+  sections: SectionUpdateManyInput
   projects: ProjectUpdateManyWithoutOwnersInput
   wips: WipUpdateManyWithoutOwnerInput
   appreciations: AppreciationUpdateManyInput
@@ -4440,6 +4501,10 @@ input UserUpdateDataInput {
 }
 
 input UserUpdatefieldsInput {
+  set: [String!]
+}
+
+input UserUpdateimagesInput {
   set: [String!]
 }
 
@@ -4457,7 +4522,9 @@ input UserUpdateInput {
   display_name: String
   twitter: String
   fields: UserUpdatefieldsInput
+  images: UserUpdateimagesInput
   links: LinkUpdateManyInput
+  sections: SectionUpdateManyInput
   projects: ProjectUpdateManyWithoutOwnersInput
   wips: WipUpdateManyWithoutOwnerInput
   appreciations: AppreciationUpdateManyInput
@@ -4536,7 +4603,9 @@ input UserUpdateWithoutCollectionsDataInput {
   display_name: String
   twitter: String
   fields: UserUpdatefieldsInput
+  images: UserUpdateimagesInput
   links: LinkUpdateManyInput
+  sections: SectionUpdateManyInput
   projects: ProjectUpdateManyWithoutOwnersInput
   wips: WipUpdateManyWithoutOwnerInput
   appreciations: AppreciationUpdateManyInput
@@ -4560,7 +4629,9 @@ input UserUpdateWithoutFollowersDataInput {
   display_name: String
   twitter: String
   fields: UserUpdatefieldsInput
+  images: UserUpdateimagesInput
   links: LinkUpdateManyInput
+  sections: SectionUpdateManyInput
   projects: ProjectUpdateManyWithoutOwnersInput
   wips: WipUpdateManyWithoutOwnerInput
   appreciations: AppreciationUpdateManyInput
@@ -4584,7 +4655,9 @@ input UserUpdateWithoutFollowingDataInput {
   display_name: String
   twitter: String
   fields: UserUpdatefieldsInput
+  images: UserUpdateimagesInput
   links: LinkUpdateManyInput
+  sections: SectionUpdateManyInput
   projects: ProjectUpdateManyWithoutOwnersInput
   wips: WipUpdateManyWithoutOwnerInput
   appreciations: AppreciationUpdateManyInput
@@ -4608,7 +4681,9 @@ input UserUpdateWithoutProjectsDataInput {
   display_name: String
   twitter: String
   fields: UserUpdatefieldsInput
+  images: UserUpdateimagesInput
   links: LinkUpdateManyInput
+  sections: SectionUpdateManyInput
   wips: WipUpdateManyWithoutOwnerInput
   appreciations: AppreciationUpdateManyInput
   collections: CollectionUpdateManyWithoutOwnersInput
@@ -4632,7 +4707,9 @@ input UserUpdateWithoutWipsDataInput {
   display_name: String
   twitter: String
   fields: UserUpdatefieldsInput
+  images: UserUpdateimagesInput
   links: LinkUpdateManyInput
+  sections: SectionUpdateManyInput
   projects: ProjectUpdateManyWithoutOwnersInput
   appreciations: AppreciationUpdateManyInput
   collections: CollectionUpdateManyWithoutOwnersInput
@@ -5373,6 +5450,9 @@ input UserWhereInput {
   links_every: LinkWhereInput
   links_some: LinkWhereInput
   links_none: LinkWhereInput
+  sections_every: SectionWhereInput
+  sections_some: SectionWhereInput
+  sections_none: SectionWhereInput
   projects_every: ProjectWhereInput
   projects_some: ProjectWhereInput
   projects_none: ProjectWhereInput
