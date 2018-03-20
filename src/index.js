@@ -1,17 +1,9 @@
 const { GraphQLServer } = require('graphql-yoga');
 const { Prisma } = require('prisma-binding');
-const { Query, Collection, User } = require('./resolvers/Query');
-const Mutation = require('./resolvers/Mutation');
+const resolvers = require('./resolvers');
 
 require('isomorphic-fetch');
 require('dotenv').config();
-
-const resolvers = {
-    Query,
-    Mutation,
-    Collection,
-    User
-};
 
 const server = new GraphQLServer({
     typeDefs: './src/schema.graphql',
