@@ -1,6 +1,6 @@
 {
     "name": "behance-graphql",
-    "version": "0.4.7",
+    "version": "0.5.0",
     "scripts": {
         "start": "node src/index.js",
         "dev": "npm-run-all --parallel start playground",
