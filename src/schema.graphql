@@ -3,46 +3,17 @@
 type Query {
     projects(params: ProjectsInput): [Project!]!
     project(id: ID!): Project!
-    projectComments(id: ID!): [Comment!]!
-    fields: [Field!]!
+    creativeFields: [Field!]!
     creativesToFollow: [User!]!
     collections(params: CollectionsInput): [Collection!]!
     collection(id: ID!): Collection!
-    collectionProjects(id: ID!): [Project!]!
     users(params: UsersInput): [User!]
-    user(id: ID!): UserPayload!
-    userProjects(id: ID!, params: UserProjectsInput): [Project!]
-    userWips(id: ID!, params: UserProjectsInput): [Wip!]
-    userAppreciations(id: ID!, params: UserAppreciationsInput): [Appreciation!]
-    userCollections(id: ID!, params: UserCollectionsInput): [Collection!]
-    userStats(id: ID!): UserStatsByPeriod!
-    userFollowers(id: ID!, params: UserFollowersInput): [User!]
-    userFollowing(id: ID!, params: UserFollowersInput): [User!]
-    userWorkExperience(id: ID!): [WorkExperience!]
+    user(id: ID!): User!
 }
 
 type Mutation {
     signup(email: String!, password: String!, name: String!): AuthPayload
     login(email: String!, password: String!): AuthPayload
-}
-
-# TODO Compose with User
-type UserPayload {
-    id: ID!
-    first_name: String!
-    last_name: String!
-    username: String!
-    city: String
-    state: String
-    country: String
-    company: String
-    occupation: String
-    created_on: Int!
-    url: String!
-    display_name: String!
-    fields: [String!]!
-    twitter: String
-    links: [Link!]
 }
 
 type AuthPayload {
@@ -52,8 +23,17 @@ type AuthPayload {
 
 input ProjectsInput {
     q: String
-    sort: ProjectSortBy
-    time: Period
+
+    """
+    ProjectSortBy: featured_date, appreciations, views, comments, published_date
+    """
+    sort: String
+
+    """
+    Period: all, today, week, month
+    """
+    time: String
+
     field: String
     country: String
     state: String
@@ -73,79 +53,76 @@ input UsersInput {
     city: String
     page: Int
     tags: String
-    sort: UserSortBy
-}
 
-input UserProjectsInput {
-    sort: ProjectSortBy
-    time: Period
-    page: Int
-}
-
-input UserAppreciationsInput {
-    page: Int
-}
-
-input UserCollectionsInput {
-    time: Period
-    page: String
-    sort: CollectionSortBy
-}
-
-input UserFollowersInput {
-    page: String
-    sort: UserFollowerSortBy
-    sort_order: SortOrder
-    per_page: Int
+    """
+    UserSortBy: featured_date, appreciations, views, comments, published_date, followed
+    """
+    sort: String
 }
 
 input CollectionsInput {
     q: String
-    time: Period
+    """
+    Period: all, today, week, month
+    """
+    time: String
     page: String
-    sort: CollectionSortBy
+    """
+    CollectionSortBy: comments, views, last_item_added_date
+    """
+    sort: String
 }
 
-enum Period {
-    all
-    today
-    week
-    month
-}
+# input UserProjectsInput {
+#     sort: ProjectSortBy
+#     time: Period
+#     page: Int
+# }
 
-enum ProjectSortBy {
-    featured_date
-    appreciations
-    views
-    comments
-    published_date
-}
+# input UserCollectionsInput {
+#     time: Period
+#     page: String
+#     sort: CollectionSortBy
+# }
 
-enum UserSortBy {
-    featured_date
-    appreciations
-    views
-    comments
-    published_date
-    followed
-}
+# input UserFollowersInput {
+#     page: String
+#     sort: UserFollowerSortBy
+#     sort_order: SortOrder
+#     per_page: Int
+# }
 
-enum UserFollowerSortBy {
-    created_date
-    appreciations
-    views
-    comments
-    followed
-    alpha
-}
+# enum Period {
+#     all
+#     today
+#     week
+#     month
+# }
 
-enum CollectionSortBy {
-    comments
-    views
-    last_item_added_date
-}
+# enum ProjectSortBy {
+#     featured_date
+#     appreciations
+#     views
+#     comments
+#     published_date
+# }
 
-enum SortOrder {
-    asc
-    desc
-}
+# enum UserFollowerSortBy {
+#     created_date
+#     appreciations
+#     views
+#     comments
+#     followed
+#     alpha
+# }
+
+# enum CollectionSortBy {
+#     comments
+#     views
+#     last_item_added_date
+# }
+
+# enum SortOrder {
+#     asc
+#     desc
+# }

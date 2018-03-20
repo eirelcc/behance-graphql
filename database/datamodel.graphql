@@ -27,7 +27,7 @@ type User {
     id: ID! @unique
     first_name: String!
     last_name: String!
-    username: String!
+    username: String! @unique
     city: String
     state: String
     country: String
@@ -37,6 +37,20 @@ type User {
     url: String!
     display_name: String!
     fields: [String!]!
+
+    twitter: String
+    links: [Link!]!
+
+    projects(params: UserProjectsInput): [Project!]!
+    wips(params: UserProjectsInput): [Wip!]!
+    appreciations(params: UserAppreciationsInput): [Appreciation!]!
+    collections(params: UserCollectionsInput): [Collection!]!
+    stats: UserStatsByPeriod!
+    followers(params: UserFollowersInput): [User!]!
+        @relation(name: "UserFollowers")
+    following(params: UserFollowersInput): [User!]!
+        @relation(name: "UserFollowing")
+    workExperience: [WorkExperience!]!
 }
 
 type Collection {
@@ -47,6 +61,7 @@ type Collection {
     images: [String!]
     created_on: Int!
     modified_on: Int!
+    projects: [Project!]!
 }
 
 type Revision {
@@ -138,4 +153,27 @@ type SU {
     name: String!
     email: String! @unique
     password: String!
+}
+
+input UserProjectsInput {
+    sort: String
+    time: String
+    page: Int
+}
+
+input UserAppreciationsInput {
+    page: Int
+}
+
+input UserCollectionsInput {
+    time: String
+    page: String
+    sort: String
+}
+
+input UserFollowersInput {
+    page: String
+    sort: String
+    sort_order: String
+    per_page: Int
 }

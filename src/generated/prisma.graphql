@@ -13,6 +13,7 @@ type Collection implements Node {
   images: [String!]
   created_on: Int!
   modified_on: Int!
+  projects(where: ProjectWhereInput, orderBy: ProjectOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Project!]
 }
 
 type Field implements Node {
@@ -67,6 +68,16 @@ type User implements Node {
   url: String!
   display_name: String!
   fields: [String!]
+  twitter: String
+  links(where: LinkWhereInput, orderBy: LinkOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Link!]
+  projects(where: ProjectWhereInput, orderBy: ProjectOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Project!]
+  wips(where: WipWhereInput, orderBy: WipOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Wip!]
+  appreciations(where: AppreciationWhereInput, orderBy: AppreciationOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Appreciation!]
+  collections(where: CollectionWhereInput, orderBy: CollectionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Collection!]
+  stats(where: UserStatsByPeriodWhereInput): UserStatsByPeriod!
+  followers(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User!]
+  following(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User!]
+  workExperience(where: WorkExperienceWhereInput, orderBy: WorkExperienceOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [WorkExperience!]
 }
 
 type Wip implements Node {
@@ -182,6 +193,10 @@ input AppreciationCreateInput {
   project: ProjectCreateOneInput!
 }
 
+input AppreciationCreateManyInput {
+  create: [AppreciationCreateInput!]
+}
+
 """
 An edge in a connection.
 """
@@ -249,6 +264,10 @@ input AppreciationSubscriptionWhereInput {
 input AppreciationUpdateInput {
   timestamp: Int
   project: ProjectUpdateOneInput
+}
+
+input AppreciationUpdateManyInput {
+  create: [AppreciationCreateInput!]
 }
 
 input AppreciationWhereInput {
@@ -323,8 +342,23 @@ input CollectionCreateInput {
   created_on: Int!
   modified_on: Int!
   images: CollectionCreateimagesInput
-  owners: UserCreateManyInput
+  owners: UserCreateManyWithoutCollectionsInput
   stats: CollectionStatsCreateOneInput!
+  projects: ProjectCreateManyInput
+}
+
+input CollectionCreateManyWithoutOwnersInput {
+  create: [CollectionCreateWithoutOwnersInput!]
+  connect: [CollectionWhereUniqueInput!]
+}
+
+input CollectionCreateWithoutOwnersInput {
+  title: String!
+  created_on: Int!
+  modified_on: Int!
+  images: CollectionCreateimagesInput
+  stats: CollectionStatsCreateOneInput!
+  projects: ProjectCreateManyInput
 }
 
 """
@@ -596,8 +630,38 @@ input CollectionUpdateInput {
   created_on: Int
   modified_on: Int
   images: CollectionUpdateimagesInput
-  owners: UserUpdateManyInput
+  owners: UserUpdateManyWithoutCollectionsInput
   stats: CollectionStatsUpdateOneInput
+  projects: ProjectUpdateManyInput
+}
+
+input CollectionUpdateManyWithoutOwnersInput {
+  create: [CollectionCreateWithoutOwnersInput!]
+  connect: [CollectionWhereUniqueInput!]
+  disconnect: [CollectionWhereUniqueInput!]
+  delete: [CollectionWhereUniqueInput!]
+  update: [CollectionUpdateWithWhereUniqueWithoutOwnersInput!]
+  upsert: [CollectionUpsertWithWhereUniqueWithoutOwnersInput!]
+}
+
+input CollectionUpdateWithoutOwnersDataInput {
+  title: String
+  created_on: Int
+  modified_on: Int
+  images: CollectionUpdateimagesInput
+  stats: CollectionStatsUpdateOneInput
+  projects: ProjectUpdateManyInput
+}
+
+input CollectionUpdateWithWhereUniqueWithoutOwnersInput {
+  where: CollectionWhereUniqueInput!
+  data: CollectionUpdateWithoutOwnersDataInput!
+}
+
+input CollectionUpsertWithWhereUniqueWithoutOwnersInput {
+  where: CollectionWhereUniqueInput!
+  update: CollectionUpdateWithoutOwnersDataInput!
+  create: CollectionCreateWithoutOwnersInput!
 }
 
 input CollectionWhereInput {
@@ -777,6 +841,9 @@ input CollectionWhereInput {
   owners_some: UserWhereInput
   owners_none: UserWhereInput
   stats: CollectionStatsWhereInput
+  projects_every: ProjectWhereInput
+  projects_some: ProjectWhereInput
+  projects_none: ProjectWhereInput
 }
 
 input CollectionWhereUniqueInput {
@@ -1219,6 +1286,10 @@ input LinkCreateInput {
   url: String!
 }
 
+input LinkCreateManyInput {
+  create: [LinkCreateInput!]
+}
+
 """
 An edge in a connection.
 """
@@ -1289,6 +1360,10 @@ input LinkSubscriptionWhereInput {
 input LinkUpdateInput {
   title: String
   url: String
+}
+
+input LinkUpdateManyInput {
+  create: [LinkCreateInput!]
 }
 
 input LinkWhereInput {
@@ -1557,14 +1632,36 @@ input ProjectCreateInput {
   url: String!
   mature_content: Int!
   fields: ProjectCreatefieldsInput
-  owners: UserCreateManyInput
+  owners: UserCreateManyWithoutProjectsInput
   stats: ProjectsStatsCreateOneInput!
   comments: CommentCreateManyInput
+}
+
+input ProjectCreateManyInput {
+  create: [ProjectCreateInput!]
+  connect: [ProjectWhereUniqueInput!]
+}
+
+input ProjectCreateManyWithoutOwnersInput {
+  create: [ProjectCreateWithoutOwnersInput!]
+  connect: [ProjectWhereUniqueInput!]
 }
 
 input ProjectCreateOneInput {
   create: ProjectCreateInput
   connect: ProjectWhereUniqueInput
+}
+
+input ProjectCreateWithoutOwnersInput {
+  name: String!
+  published_on: Int!
+  created_on: Int!
+  modified_on: Int!
+  url: String!
+  mature_content: Int!
+  fields: ProjectCreatefieldsInput
+  stats: ProjectsStatsCreateOneInput!
+  comments: CommentCreateManyInput
 }
 
 """
@@ -1880,7 +1977,7 @@ input ProjectUpdateDataInput {
   url: String
   mature_content: Int
   fields: ProjectUpdatefieldsInput
-  owners: UserUpdateManyInput
+  owners: UserUpdateManyWithoutProjectsInput
   stats: ProjectsStatsUpdateOneInput
   comments: CommentUpdateManyInput
 }
@@ -1897,9 +1994,27 @@ input ProjectUpdateInput {
   url: String
   mature_content: Int
   fields: ProjectUpdatefieldsInput
-  owners: UserUpdateManyInput
+  owners: UserUpdateManyWithoutProjectsInput
   stats: ProjectsStatsUpdateOneInput
   comments: CommentUpdateManyInput
+}
+
+input ProjectUpdateManyInput {
+  create: [ProjectCreateInput!]
+  connect: [ProjectWhereUniqueInput!]
+  disconnect: [ProjectWhereUniqueInput!]
+  delete: [ProjectWhereUniqueInput!]
+  update: [ProjectUpdateWithWhereUniqueNestedInput!]
+  upsert: [ProjectUpsertWithWhereUniqueNestedInput!]
+}
+
+input ProjectUpdateManyWithoutOwnersInput {
+  create: [ProjectCreateWithoutOwnersInput!]
+  connect: [ProjectWhereUniqueInput!]
+  disconnect: [ProjectWhereUniqueInput!]
+  delete: [ProjectWhereUniqueInput!]
+  update: [ProjectUpdateWithWhereUniqueWithoutOwnersInput!]
+  upsert: [ProjectUpsertWithWhereUniqueWithoutOwnersInput!]
 }
 
 input ProjectUpdateOneInput {
@@ -1911,9 +2026,43 @@ input ProjectUpdateOneInput {
   upsert: ProjectUpsertNestedInput
 }
 
+input ProjectUpdateWithoutOwnersDataInput {
+  name: String
+  published_on: Int
+  created_on: Int
+  modified_on: Int
+  url: String
+  mature_content: Int
+  fields: ProjectUpdatefieldsInput
+  stats: ProjectsStatsUpdateOneInput
+  comments: CommentUpdateManyInput
+}
+
+input ProjectUpdateWithWhereUniqueNestedInput {
+  where: ProjectWhereUniqueInput!
+  data: ProjectUpdateDataInput!
+}
+
+input ProjectUpdateWithWhereUniqueWithoutOwnersInput {
+  where: ProjectWhereUniqueInput!
+  data: ProjectUpdateWithoutOwnersDataInput!
+}
+
 input ProjectUpsertNestedInput {
   update: ProjectUpdateDataInput!
   create: ProjectCreateInput!
+}
+
+input ProjectUpsertWithWhereUniqueNestedInput {
+  where: ProjectWhereUniqueInput!
+  update: ProjectUpdateDataInput!
+  create: ProjectCreateInput!
+}
+
+input ProjectUpsertWithWhereUniqueWithoutOwnersInput {
+  where: ProjectWhereUniqueInput!
+  update: ProjectUpdateWithoutOwnersDataInput!
+  create: ProjectCreateWithoutOwnersInput!
 }
 
 input ProjectWhereInput {
@@ -3562,17 +3711,167 @@ input UserCreateInput {
   created_on: Int!
   url: String!
   display_name: String!
+  twitter: String
   fields: UserCreatefieldsInput
+  links: LinkCreateManyInput
+  projects: ProjectCreateManyWithoutOwnersInput
+  wips: WipCreateManyWithoutOwnerInput
+  appreciations: AppreciationCreateManyInput
+  collections: CollectionCreateManyWithoutOwnersInput
+  stats: UserStatsByPeriodCreateOneInput!
+  followers: UserCreateManyWithoutFollowersInput
+  following: UserCreateManyWithoutFollowingInput
+  workExperience: WorkExperienceCreateManyInput
 }
 
-input UserCreateManyInput {
-  create: [UserCreateInput!]
+input UserCreateManyWithoutCollectionsInput {
+  create: [UserCreateWithoutCollectionsInput!]
+  connect: [UserWhereUniqueInput!]
+}
+
+input UserCreateManyWithoutFollowersInput {
+  create: [UserCreateWithoutFollowersInput!]
+  connect: [UserWhereUniqueInput!]
+}
+
+input UserCreateManyWithoutFollowingInput {
+  create: [UserCreateWithoutFollowingInput!]
+  connect: [UserWhereUniqueInput!]
+}
+
+input UserCreateManyWithoutProjectsInput {
+  create: [UserCreateWithoutProjectsInput!]
   connect: [UserWhereUniqueInput!]
 }
 
 input UserCreateOneInput {
   create: UserCreateInput
   connect: UserWhereUniqueInput
+}
+
+input UserCreateOneWithoutWipsInput {
+  create: UserCreateWithoutWipsInput
+  connect: UserWhereUniqueInput
+}
+
+input UserCreateWithoutCollectionsInput {
+  first_name: String!
+  last_name: String!
+  username: String!
+  city: String
+  state: String
+  country: String
+  company: String
+  occupation: String
+  created_on: Int!
+  url: String!
+  display_name: String!
+  twitter: String
+  fields: UserCreatefieldsInput
+  links: LinkCreateManyInput
+  projects: ProjectCreateManyWithoutOwnersInput
+  wips: WipCreateManyWithoutOwnerInput
+  appreciations: AppreciationCreateManyInput
+  stats: UserStatsByPeriodCreateOneInput!
+  followers: UserCreateManyWithoutFollowersInput
+  following: UserCreateManyWithoutFollowingInput
+  workExperience: WorkExperienceCreateManyInput
+}
+
+input UserCreateWithoutFollowersInput {
+  first_name: String!
+  last_name: String!
+  username: String!
+  city: String
+  state: String
+  country: String
+  company: String
+  occupation: String
+  created_on: Int!
+  url: String!
+  display_name: String!
+  twitter: String
+  fields: UserCreatefieldsInput
+  links: LinkCreateManyInput
+  projects: ProjectCreateManyWithoutOwnersInput
+  wips: WipCreateManyWithoutOwnerInput
+  appreciations: AppreciationCreateManyInput
+  collections: CollectionCreateManyWithoutOwnersInput
+  stats: UserStatsByPeriodCreateOneInput!
+  following: UserCreateManyWithoutFollowingInput
+  workExperience: WorkExperienceCreateManyInput
+}
+
+input UserCreateWithoutFollowingInput {
+  first_name: String!
+  last_name: String!
+  username: String!
+  city: String
+  state: String
+  country: String
+  company: String
+  occupation: String
+  created_on: Int!
+  url: String!
+  display_name: String!
+  twitter: String
+  fields: UserCreatefieldsInput
+  links: LinkCreateManyInput
+  projects: ProjectCreateManyWithoutOwnersInput
+  wips: WipCreateManyWithoutOwnerInput
+  appreciations: AppreciationCreateManyInput
+  collections: CollectionCreateManyWithoutOwnersInput
+  stats: UserStatsByPeriodCreateOneInput!
+  followers: UserCreateManyWithoutFollowersInput
+  workExperience: WorkExperienceCreateManyInput
+}
+
+input UserCreateWithoutProjectsInput {
+  first_name: String!
+  last_name: String!
+  username: String!
+  city: String
+  state: String
+  country: String
+  company: String
+  occupation: String
+  created_on: Int!
+  url: String!
+  display_name: String!
+  twitter: String
+  fields: UserCreatefieldsInput
+  links: LinkCreateManyInput
+  wips: WipCreateManyWithoutOwnerInput
+  appreciations: AppreciationCreateManyInput
+  collections: CollectionCreateManyWithoutOwnersInput
+  stats: UserStatsByPeriodCreateOneInput!
+  followers: UserCreateManyWithoutFollowersInput
+  following: UserCreateManyWithoutFollowingInput
+  workExperience: WorkExperienceCreateManyInput
+}
+
+input UserCreateWithoutWipsInput {
+  first_name: String!
+  last_name: String!
+  username: String!
+  city: String
+  state: String
+  country: String
+  company: String
+  occupation: String
+  created_on: Int!
+  url: String!
+  display_name: String!
+  twitter: String
+  fields: UserCreatefieldsInput
+  links: LinkCreateManyInput
+  projects: ProjectCreateManyWithoutOwnersInput
+  appreciations: AppreciationCreateManyInput
+  collections: CollectionCreateManyWithoutOwnersInput
+  stats: UserStatsByPeriodCreateOneInput!
+  followers: UserCreateManyWithoutFollowersInput
+  following: UserCreateManyWithoutFollowingInput
+  workExperience: WorkExperienceCreateManyInput
 }
 
 """
@@ -3614,6 +3913,8 @@ enum UserOrderByInput {
   url_DESC
   display_name_ASC
   display_name_DESC
+  twitter_ASC
+  twitter_DESC
   updatedAt_ASC
   updatedAt_DESC
   createdAt_ASC
@@ -3634,6 +3935,7 @@ type UserPreviousValues {
   url: String!
   display_name: String!
   fields: [String!]
+  twitter: String
 }
 
 type UserStats {
@@ -3666,6 +3968,10 @@ type UserStatsByPeriodConnection {
 input UserStatsByPeriodCreateInput {
   description: String
   all_time: UserStatsCreateOneInput!
+}
+
+input UserStatsByPeriodCreateOneInput {
+  create: UserStatsByPeriodCreateInput
 }
 
 """
@@ -3732,9 +4038,27 @@ input UserStatsByPeriodSubscriptionWhereInput {
   node: UserStatsByPeriodWhereInput
 }
 
+input UserStatsByPeriodUpdateDataInput {
+  description: String
+  all_time: UserStatsUpdateOneInput
+}
+
 input UserStatsByPeriodUpdateInput {
   description: String
   all_time: UserStatsUpdateOneInput
+}
+
+input UserStatsByPeriodUpdateOneInput {
+  create: UserStatsByPeriodCreateInput
+  disconnect: Boolean
+  delete: Boolean
+  update: UserStatsByPeriodUpdateDataInput
+  upsert: UserStatsByPeriodUpsertNestedInput
+}
+
+input UserStatsByPeriodUpsertNestedInput {
+  update: UserStatsByPeriodUpdateDataInput!
+  create: UserStatsByPeriodCreateInput!
 }
 
 input UserStatsByPeriodWhereInput {
@@ -4102,7 +4426,17 @@ input UserUpdateDataInput {
   created_on: Int
   url: String
   display_name: String
+  twitter: String
   fields: UserUpdatefieldsInput
+  links: LinkUpdateManyInput
+  projects: ProjectUpdateManyWithoutOwnersInput
+  wips: WipUpdateManyWithoutOwnerInput
+  appreciations: AppreciationUpdateManyInput
+  collections: CollectionUpdateManyWithoutOwnersInput
+  stats: UserStatsByPeriodUpdateOneInput
+  followers: UserUpdateManyWithoutFollowersInput
+  following: UserUpdateManyWithoutFollowingInput
+  workExperience: WorkExperienceUpdateManyInput
 }
 
 input UserUpdatefieldsInput {
@@ -4121,16 +4455,53 @@ input UserUpdateInput {
   created_on: Int
   url: String
   display_name: String
+  twitter: String
   fields: UserUpdatefieldsInput
+  links: LinkUpdateManyInput
+  projects: ProjectUpdateManyWithoutOwnersInput
+  wips: WipUpdateManyWithoutOwnerInput
+  appreciations: AppreciationUpdateManyInput
+  collections: CollectionUpdateManyWithoutOwnersInput
+  stats: UserStatsByPeriodUpdateOneInput
+  followers: UserUpdateManyWithoutFollowersInput
+  following: UserUpdateManyWithoutFollowingInput
+  workExperience: WorkExperienceUpdateManyInput
 }
 
-input UserUpdateManyInput {
-  create: [UserCreateInput!]
+input UserUpdateManyWithoutCollectionsInput {
+  create: [UserCreateWithoutCollectionsInput!]
   connect: [UserWhereUniqueInput!]
   disconnect: [UserWhereUniqueInput!]
   delete: [UserWhereUniqueInput!]
-  update: [UserUpdateWithWhereUniqueNestedInput!]
-  upsert: [UserUpsertWithWhereUniqueNestedInput!]
+  update: [UserUpdateWithWhereUniqueWithoutCollectionsInput!]
+  upsert: [UserUpsertWithWhereUniqueWithoutCollectionsInput!]
+}
+
+input UserUpdateManyWithoutFollowersInput {
+  create: [UserCreateWithoutFollowersInput!]
+  connect: [UserWhereUniqueInput!]
+  disconnect: [UserWhereUniqueInput!]
+  delete: [UserWhereUniqueInput!]
+  update: [UserUpdateWithWhereUniqueWithoutFollowersInput!]
+  upsert: [UserUpsertWithWhereUniqueWithoutFollowersInput!]
+}
+
+input UserUpdateManyWithoutFollowingInput {
+  create: [UserCreateWithoutFollowingInput!]
+  connect: [UserWhereUniqueInput!]
+  disconnect: [UserWhereUniqueInput!]
+  delete: [UserWhereUniqueInput!]
+  update: [UserUpdateWithWhereUniqueWithoutFollowingInput!]
+  upsert: [UserUpsertWithWhereUniqueWithoutFollowingInput!]
+}
+
+input UserUpdateManyWithoutProjectsInput {
+  create: [UserCreateWithoutProjectsInput!]
+  connect: [UserWhereUniqueInput!]
+  disconnect: [UserWhereUniqueInput!]
+  delete: [UserWhereUniqueInput!]
+  update: [UserUpdateWithWhereUniqueWithoutProjectsInput!]
+  upsert: [UserUpsertWithWhereUniqueWithoutProjectsInput!]
 }
 
 input UserUpdateOneInput {
@@ -4142,9 +4513,153 @@ input UserUpdateOneInput {
   upsert: UserUpsertNestedInput
 }
 
-input UserUpdateWithWhereUniqueNestedInput {
+input UserUpdateOneWithoutWipsInput {
+  create: UserCreateWithoutWipsInput
+  connect: UserWhereUniqueInput
+  disconnect: Boolean
+  delete: Boolean
+  update: UserUpdateWithoutWipsDataInput
+  upsert: UserUpsertWithoutWipsInput
+}
+
+input UserUpdateWithoutCollectionsDataInput {
+  first_name: String
+  last_name: String
+  username: String
+  city: String
+  state: String
+  country: String
+  company: String
+  occupation: String
+  created_on: Int
+  url: String
+  display_name: String
+  twitter: String
+  fields: UserUpdatefieldsInput
+  links: LinkUpdateManyInput
+  projects: ProjectUpdateManyWithoutOwnersInput
+  wips: WipUpdateManyWithoutOwnerInput
+  appreciations: AppreciationUpdateManyInput
+  stats: UserStatsByPeriodUpdateOneInput
+  followers: UserUpdateManyWithoutFollowersInput
+  following: UserUpdateManyWithoutFollowingInput
+  workExperience: WorkExperienceUpdateManyInput
+}
+
+input UserUpdateWithoutFollowersDataInput {
+  first_name: String
+  last_name: String
+  username: String
+  city: String
+  state: String
+  country: String
+  company: String
+  occupation: String
+  created_on: Int
+  url: String
+  display_name: String
+  twitter: String
+  fields: UserUpdatefieldsInput
+  links: LinkUpdateManyInput
+  projects: ProjectUpdateManyWithoutOwnersInput
+  wips: WipUpdateManyWithoutOwnerInput
+  appreciations: AppreciationUpdateManyInput
+  collections: CollectionUpdateManyWithoutOwnersInput
+  stats: UserStatsByPeriodUpdateOneInput
+  following: UserUpdateManyWithoutFollowingInput
+  workExperience: WorkExperienceUpdateManyInput
+}
+
+input UserUpdateWithoutFollowingDataInput {
+  first_name: String
+  last_name: String
+  username: String
+  city: String
+  state: String
+  country: String
+  company: String
+  occupation: String
+  created_on: Int
+  url: String
+  display_name: String
+  twitter: String
+  fields: UserUpdatefieldsInput
+  links: LinkUpdateManyInput
+  projects: ProjectUpdateManyWithoutOwnersInput
+  wips: WipUpdateManyWithoutOwnerInput
+  appreciations: AppreciationUpdateManyInput
+  collections: CollectionUpdateManyWithoutOwnersInput
+  stats: UserStatsByPeriodUpdateOneInput
+  followers: UserUpdateManyWithoutFollowersInput
+  workExperience: WorkExperienceUpdateManyInput
+}
+
+input UserUpdateWithoutProjectsDataInput {
+  first_name: String
+  last_name: String
+  username: String
+  city: String
+  state: String
+  country: String
+  company: String
+  occupation: String
+  created_on: Int
+  url: String
+  display_name: String
+  twitter: String
+  fields: UserUpdatefieldsInput
+  links: LinkUpdateManyInput
+  wips: WipUpdateManyWithoutOwnerInput
+  appreciations: AppreciationUpdateManyInput
+  collections: CollectionUpdateManyWithoutOwnersInput
+  stats: UserStatsByPeriodUpdateOneInput
+  followers: UserUpdateManyWithoutFollowersInput
+  following: UserUpdateManyWithoutFollowingInput
+  workExperience: WorkExperienceUpdateManyInput
+}
+
+input UserUpdateWithoutWipsDataInput {
+  first_name: String
+  last_name: String
+  username: String
+  city: String
+  state: String
+  country: String
+  company: String
+  occupation: String
+  created_on: Int
+  url: String
+  display_name: String
+  twitter: String
+  fields: UserUpdatefieldsInput
+  links: LinkUpdateManyInput
+  projects: ProjectUpdateManyWithoutOwnersInput
+  appreciations: AppreciationUpdateManyInput
+  collections: CollectionUpdateManyWithoutOwnersInput
+  stats: UserStatsByPeriodUpdateOneInput
+  followers: UserUpdateManyWithoutFollowersInput
+  following: UserUpdateManyWithoutFollowingInput
+  workExperience: WorkExperienceUpdateManyInput
+}
+
+input UserUpdateWithWhereUniqueWithoutCollectionsInput {
   where: UserWhereUniqueInput!
-  data: UserUpdateDataInput!
+  data: UserUpdateWithoutCollectionsDataInput!
+}
+
+input UserUpdateWithWhereUniqueWithoutFollowersInput {
+  where: UserWhereUniqueInput!
+  data: UserUpdateWithoutFollowersDataInput!
+}
+
+input UserUpdateWithWhereUniqueWithoutFollowingInput {
+  where: UserWhereUniqueInput!
+  data: UserUpdateWithoutFollowingDataInput!
+}
+
+input UserUpdateWithWhereUniqueWithoutProjectsInput {
+  where: UserWhereUniqueInput!
+  data: UserUpdateWithoutProjectsDataInput!
 }
 
 input UserUpsertNestedInput {
@@ -4152,10 +4667,33 @@ input UserUpsertNestedInput {
   create: UserCreateInput!
 }
 
-input UserUpsertWithWhereUniqueNestedInput {
+input UserUpsertWithoutWipsInput {
+  update: UserUpdateWithoutWipsDataInput!
+  create: UserCreateWithoutWipsInput!
+}
+
+input UserUpsertWithWhereUniqueWithoutCollectionsInput {
   where: UserWhereUniqueInput!
-  update: UserUpdateDataInput!
-  create: UserCreateInput!
+  update: UserUpdateWithoutCollectionsDataInput!
+  create: UserCreateWithoutCollectionsInput!
+}
+
+input UserUpsertWithWhereUniqueWithoutFollowersInput {
+  where: UserWhereUniqueInput!
+  update: UserUpdateWithoutFollowersDataInput!
+  create: UserCreateWithoutFollowersInput!
+}
+
+input UserUpsertWithWhereUniqueWithoutFollowingInput {
+  where: UserWhereUniqueInput!
+  update: UserUpdateWithoutFollowingDataInput!
+  create: UserCreateWithoutFollowingInput!
+}
+
+input UserUpsertWithWhereUniqueWithoutProjectsInput {
+  where: UserWhereUniqueInput!
+  update: UserUpdateWithoutProjectsDataInput!
+  create: UserCreateWithoutProjectsInput!
 }
 
 input UserWhereInput {
@@ -4779,10 +5317,89 @@ input UserWhereInput {
   All values not ending with the given string.
   """
   display_name_not_ends_with: String
+  twitter: String
+  """
+  All values that are not equal to given value.
+  """
+  twitter_not: String
+  """
+  All values that are contained in given list.
+  """
+  twitter_in: [String!]
+  """
+  All values that are not contained in given list.
+  """
+  twitter_not_in: [String!]
+  """
+  All values less than the given value.
+  """
+  twitter_lt: String
+  """
+  All values less than or equal the given value.
+  """
+  twitter_lte: String
+  """
+  All values greater than the given value.
+  """
+  twitter_gt: String
+  """
+  All values greater than or equal the given value.
+  """
+  twitter_gte: String
+  """
+  All values containing the given string.
+  """
+  twitter_contains: String
+  """
+  All values not containing the given string.
+  """
+  twitter_not_contains: String
+  """
+  All values starting with the given string.
+  """
+  twitter_starts_with: String
+  """
+  All values not starting with the given string.
+  """
+  twitter_not_starts_with: String
+  """
+  All values ending with the given string.
+  """
+  twitter_ends_with: String
+  """
+  All values not ending with the given string.
+  """
+  twitter_not_ends_with: String
+  links_every: LinkWhereInput
+  links_some: LinkWhereInput
+  links_none: LinkWhereInput
+  projects_every: ProjectWhereInput
+  projects_some: ProjectWhereInput
+  projects_none: ProjectWhereInput
+  wips_every: WipWhereInput
+  wips_some: WipWhereInput
+  wips_none: WipWhereInput
+  appreciations_every: AppreciationWhereInput
+  appreciations_some: AppreciationWhereInput
+  appreciations_none: AppreciationWhereInput
+  collections_every: CollectionWhereInput
+  collections_some: CollectionWhereInput
+  collections_none: CollectionWhereInput
+  stats: UserStatsByPeriodWhereInput
+  followers_every: UserWhereInput
+  followers_some: UserWhereInput
+  followers_none: UserWhereInput
+  following_every: UserWhereInput
+  following_some: UserWhereInput
+  following_none: UserWhereInput
+  workExperience_every: WorkExperienceWhereInput
+  workExperience_some: WorkExperienceWhereInput
+  workExperience_none: WorkExperienceWhereInput
 }
 
 input UserWhereUniqueInput {
   id: ID
+  username: String
 }
 
 """
@@ -4805,7 +5422,21 @@ input WipCreateInput {
   privacy: String!
   title: String
   url: String
-  owner: UserCreateOneInput!
+  owner: UserCreateOneWithoutWipsInput!
+  revisions: RevisionCreateManyInput
+  stats: WipStatsCreateOneInput!
+}
+
+input WipCreateManyWithoutOwnerInput {
+  create: [WipCreateWithoutOwnerInput!]
+  connect: [WipWhereUniqueInput!]
+}
+
+input WipCreateWithoutOwnerInput {
+  created_on: Int!
+  privacy: String!
+  title: String
+  url: String
   revisions: RevisionCreateManyInput
   stats: WipStatsCreateOneInput!
 }
@@ -5113,9 +5744,38 @@ input WipUpdateInput {
   privacy: String
   title: String
   url: String
-  owner: UserUpdateOneInput
+  owner: UserUpdateOneWithoutWipsInput
   revisions: RevisionUpdateManyInput
   stats: WipStatsUpdateOneInput
+}
+
+input WipUpdateManyWithoutOwnerInput {
+  create: [WipCreateWithoutOwnerInput!]
+  connect: [WipWhereUniqueInput!]
+  disconnect: [WipWhereUniqueInput!]
+  delete: [WipWhereUniqueInput!]
+  update: [WipUpdateWithWhereUniqueWithoutOwnerInput!]
+  upsert: [WipUpsertWithWhereUniqueWithoutOwnerInput!]
+}
+
+input WipUpdateWithoutOwnerDataInput {
+  created_on: Int
+  privacy: String
+  title: String
+  url: String
+  revisions: RevisionUpdateManyInput
+  stats: WipStatsUpdateOneInput
+}
+
+input WipUpdateWithWhereUniqueWithoutOwnerInput {
+  where: WipWhereUniqueInput!
+  data: WipUpdateWithoutOwnerDataInput!
+}
+
+input WipUpsertWithWhereUniqueWithoutOwnerInput {
+  where: WipWhereUniqueInput!
+  update: WipUpdateWithoutOwnerDataInput!
+  create: WipCreateWithoutOwnerInput!
 }
 
 input WipWhereInput {
@@ -5406,6 +6066,10 @@ input WorkExperienceCreateInput {
   location: String!
 }
 
+input WorkExperienceCreateManyInput {
+  create: [WorkExperienceCreateInput!]
+}
+
 """
 An edge in a connection.
 """
@@ -5480,6 +6144,10 @@ input WorkExperienceUpdateInput {
   position: String
   organization: String
   location: String
+}
+
+input WorkExperienceUpdateManyInput {
+  create: [WorkExperienceCreateInput!]
 }
 
 input WorkExperienceWhereInput {

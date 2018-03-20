@@ -23,8 +23,10 @@ const project = (root, args) => {
     return fetchByURL(`/projects/${args.id}`);
 };
 
-const projectComments = (root, args) => {
-    return fetchByURL(`/projects/${args.id}/comments`);
+const Project = {
+    comments: project => {
+        return fetchByURL(`/projects/${project.id}/comments`);
+    }
 };
 
 // Creatives To Follow
@@ -33,7 +35,7 @@ const creativesToFollow = (root, args) => {
 };
 
 // Creative Fields
-const fields = (root, args) => {
+const creativeFields = (root, args) => {
     return fetchByURL(`/fields`);
 };
 
@@ -46,8 +48,10 @@ const collection = (root, args) => {
     return fetchByURL(`/collections/${args.id}`);
 };
 
-const collectionProjects = (root, args) => {
-    return fetchByURL(`/collections/${args.id}/projects`);
+const Collection = {
+    projects: collection => {
+        return fetchByURL(`/collections/${collection.id}/projects`);
+    }
 };
 
 // Users
@@ -59,56 +63,45 @@ const user = (root, args) => {
     return fetchByURL(`/users/${args.id}`);
 };
 
-const userProjects = (root, args) => {
-    return fetchByURL(`/users/${args.id}/projects`, args.params);
+const User = {
+    projects: (user, args) => {
+        return fetchByURL(`/users/${user.id}/projects`, args.params);
+    },
+    wips: (user, args) => {
+        return fetchByURL(`/users/${user.id}/wips`, args.params);
+    },
+    appreciations: (user, args) => {
+        return fetchByURL(`/users/${user.id}/appreciations`, args.params);
+    },
+    collections: (user, args) => {
+        return fetchByURL(`/users/${user.id}/collections`, args.params);
+    },
+    stats: user => {
+        return fetchByURL(`/users/${user.id}/stats`);
+    },
+    followers: (user, args) => {
+        return fetchByURL(`/users/${user.id}/followers`, args.params);
+    },
+    following: (user, args) => {
+        return fetchByURL(`/users/${user.id}/following`, args.params);
+    },
+    workExperience: async user => {
+        const data = await fetchByURL(`/users/${user.id}/work_experience`);
+        return Array.isArray(data) ? data : [];
+    }
 };
 
-const userWips = (root, args) => {
-    return fetchByURL(`/users/${args.id}/wips`, args.params);
-};
-
-const userAppreciations = (root, args) => {
-    return fetchByURL(`/users/${args.id}/appreciations`, args.params);
-};
-
-const userCollections = (root, args) => {
-    return fetchByURL(`/users/${args.id}/collections`, args.params);
-};
-
-const userStats = (root, args) => {
-    return fetchByURL(`/users/${args.id}/stats`);
-};
-
-const userFollowers = (root, args) => {
-    return fetchByURL(`/users/${args.id}/followers`, args.params);
-};
-
-const userFollowing = (root, args) => {
-    return fetchByURL(`/users/${args.id}/following`, args.params);
-};
-
-const userWorkExperience = (root, args) => {
-    const data = fetchByURL(`/users/${args.id}/work_experience`);
-    return Array.isArray(data) ? data : [];
-};
-
-module.exports = {
-    project,
+const Query = {
     projects,
-    projectComments,
+    project,
     creativesToFollow,
-    fields,
+    creativeFields,
     collections,
     collection,
-    collectionProjects,
     users,
-    user,
-    userProjects,
-    userWips,
-    userAppreciations,
-    userCollections,
-    userStats,
-    userFollowers,
-    userFollowing,
-    userWorkExperience
+    user
 };
+
+module.exports.Collection = Collection;
+module.exports.User = User;
+module.exports.Query = Query;
