@@ -10,6 +10,7 @@ type Project {
     owners: [User!]!
     stats: ProjectsStats!
     comments: [Comment!]!
+    images: [String!]!
 }
 
 type Wip {
