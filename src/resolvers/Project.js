@@ -1,9 +1,11 @@
 const { fetchByURL } = require('../utils');
-const { images } = require('./shared');
 
 const comments = project => fetchByURL(`/projects/${project.id}/comments`);
+const covers = parent => Object.values(parent.covers);
+const owners = parent => Object.values(parent.owners);
 
 module.exports = {
     comments,
-    images
+    covers,
+    owners
 };

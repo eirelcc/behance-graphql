@@ -33,7 +33,7 @@ type Project implements Node {
   owners(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User!]
   stats(where: ProjectsStatsWhereInput): ProjectsStats!
   comments(where: CommentWhereInput, orderBy: CommentOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Comment!]
-  images: [String!]
+  covers: [String!]
 }
 
 type Revision implements Node {
@@ -1623,11 +1623,11 @@ type ProjectConnection {
   aggregate: AggregateProject!
 }
 
-input ProjectCreatefieldsInput {
+input ProjectCreatecoversInput {
   set: [String!]
 }
 
-input ProjectCreateimagesInput {
+input ProjectCreatefieldsInput {
   set: [String!]
 }
 
@@ -1639,7 +1639,7 @@ input ProjectCreateInput {
   url: String!
   mature_content: Int!
   fields: ProjectCreatefieldsInput
-  images: ProjectCreateimagesInput
+  covers: ProjectCreatecoversInput
   owners: UserCreateManyWithoutProjectsInput
   stats: ProjectsStatsCreateOneInput!
   comments: CommentCreateManyInput
@@ -1668,7 +1668,7 @@ input ProjectCreateWithoutOwnersInput {
   url: String!
   mature_content: Int!
   fields: ProjectCreatefieldsInput
-  images: ProjectCreateimagesInput
+  covers: ProjectCreatecoversInput
   stats: ProjectsStatsCreateOneInput!
   comments: CommentCreateManyInput
 }
@@ -1717,7 +1717,7 @@ type ProjectPreviousValues {
   url: String!
   fields: [String!]
   mature_content: Int!
-  images: [String!]
+  covers: [String!]
 }
 
 type ProjectsStats {
@@ -1979,6 +1979,10 @@ input ProjectSubscriptionWhereInput {
   node: ProjectWhereInput
 }
 
+input ProjectUpdatecoversInput {
+  set: [String!]
+}
+
 input ProjectUpdateDataInput {
   name: String
   published_on: Int
@@ -1987,17 +1991,13 @@ input ProjectUpdateDataInput {
   url: String
   mature_content: Int
   fields: ProjectUpdatefieldsInput
-  images: ProjectUpdateimagesInput
+  covers: ProjectUpdatecoversInput
   owners: UserUpdateManyWithoutProjectsInput
   stats: ProjectsStatsUpdateOneInput
   comments: CommentUpdateManyInput
 }
 
 input ProjectUpdatefieldsInput {
-  set: [String!]
-}
-
-input ProjectUpdateimagesInput {
   set: [String!]
 }
 
@@ -2009,7 +2009,7 @@ input ProjectUpdateInput {
   url: String
   mature_content: Int
   fields: ProjectUpdatefieldsInput
-  images: ProjectUpdateimagesInput
+  covers: ProjectUpdatecoversInput
   owners: UserUpdateManyWithoutProjectsInput
   stats: ProjectsStatsUpdateOneInput
   comments: CommentUpdateManyInput
@@ -2050,7 +2050,7 @@ input ProjectUpdateWithoutOwnersDataInput {
   url: String
   mature_content: Int
   fields: ProjectUpdatefieldsInput
-  images: ProjectUpdateimagesInput
+  covers: ProjectUpdatecoversInput
   stats: ProjectsStatsUpdateOneInput
   comments: CommentUpdateManyInput
 }
