@@ -1,3 +1,5 @@
-const images = parent => Object.values(parent.images);
+const images = parent => {
+    return parent.images ? Object.values(parent.images) : [];
+};
 
 module.exports.images = images;
