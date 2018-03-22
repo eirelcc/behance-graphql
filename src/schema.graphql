@@ -1,4 +1,4 @@
-# import Appreciation, Collection, Comment, Field, Link, Project, User, UserStatsByPeriod, Wip, WorkExperience from "./generated/prisma.graphql"
+# import Appreciation, Collection, Comment, Field, Link, Project, SU, User, UserStatsByPeriod, Wip, WorkExperience from "./generated/prisma.graphql"
 
 type Query {
     projects(params: ProjectsInput): [Project!]!
@@ -12,13 +12,13 @@ type Query {
 }
 
 type Mutation {
-    signup(email: String!, password: String!, name: String!): AuthPayload
-    login(email: String!, password: String!): AuthPayload
+    signup(username: String!, password: String!): AuthPayload
+    login(username: String!, password: String!): AuthPayload
 }
 
 type AuthPayload {
     token: String
-    user: User
+    user: SU
 }
 
 input ProjectsInput {

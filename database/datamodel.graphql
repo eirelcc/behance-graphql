@@ -149,8 +149,7 @@ type Field {
 
 type SU {
     id: ID! @unique
-    name: String!
-    email: String! @unique
+    username: String! @unique
     password: String!
 }
 

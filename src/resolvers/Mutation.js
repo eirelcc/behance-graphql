@@ -4,7 +4,7 @@ const { APP_SECRET, getUserId } = require('../utils');
 
 async function signup(parent, args, ctx, info) {
     const password = await bcrypt.hash(args.password, 10);
-    const user = await ctx.db.mutation.createUser({
+    const user = await ctx.db.mutation.createSU({
         data: { ...args, password }
     });
 
@@ -17,7 +17,9 @@ async function signup(parent, args, ctx, info) {
 }
 
 async function login(parent, args, ctx, info) {
-    const user = await ctx.db.query.user({ where: { email: args.email } });
+    const user = await ctx.db.query.sU({
+        where: { username: args.username }
+    });
     if (!user) {
         throw new Error('No such user found');
     }
@@ -33,8 +35,7 @@ async function login(parent, args, ctx, info) {
     };
 }
 
-
 module.exports = {
     signup,
-    login,
+    login
 };
