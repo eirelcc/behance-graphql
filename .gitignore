@@ -3,7 +3,7 @@
 .vscode/
 .DS_Store
 .env
-.env.prod
+.env.production
 node_modules
 npm-debug.log
 yarn-error.log
