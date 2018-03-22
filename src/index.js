@@ -13,10 +13,12 @@ const server = new GraphQLServer({
         ...req,
         db: new Prisma({
             typeDefs: path.join(__dirname, 'generated/prisma.graphql'),
-            endpoint: 'http://localhost:4466/behance-graphql/dev',
-            secret: 'mysecret123'
+            endpoint: process.env.PRISMA_ENDPOINT,
+            secret: process.env.PRISMA_SECRET
         })
     })
 });
 
-server.start(() => console.log('Server is running on http://localhost:4000'));
+server.start(({ port }) =>
+    console.log(`Server is running on http://localhost:${port}`)
+);

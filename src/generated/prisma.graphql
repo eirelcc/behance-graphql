@@ -508,7 +508,6 @@ input CollectionStatsUpdateInput {
 
 input CollectionStatsUpdateOneInput {
   create: CollectionStatsCreateInput
-  disconnect: Boolean
   delete: Boolean
   update: CollectionStatsUpdateDataInput
   upsert: CollectionStatsUpsertNestedInput
@@ -1834,7 +1833,6 @@ input ProjectsStatsUpdateInput {
 
 input ProjectsStatsUpdateOneInput {
   create: ProjectsStatsCreateInput
-  disconnect: Boolean
   delete: Boolean
   update: ProjectsStatsUpdateDataInput
   upsert: ProjectsStatsUpsertNestedInput
@@ -2035,7 +2033,6 @@ input ProjectUpdateManyWithoutOwnersInput {
 input ProjectUpdateOneInput {
   create: ProjectCreateInput
   connect: ProjectWhereUniqueInput
-  disconnect: Boolean
   delete: Boolean
   update: ProjectUpdateDataInput
   upsert: ProjectUpsertNestedInput
@@ -3723,23 +3720,18 @@ input UserCreateInput {
   appreciations: AppreciationCreateManyInput
   collections: CollectionCreateManyWithoutOwnersInput
   stats: UserStatsByPeriodCreateOneInput!
-  followers: UserCreateManyWithoutFollowersInput
-  following: UserCreateManyWithoutFollowingInput
+  followers: UserCreateManyInput
+  following: UserCreateManyInput
   workExperience: WorkExperienceCreateManyInput
+}
+
+input UserCreateManyInput {
+  create: [UserCreateInput!]
+  connect: [UserWhereUniqueInput!]
 }
 
 input UserCreateManyWithoutCollectionsInput {
   create: [UserCreateWithoutCollectionsInput!]
-  connect: [UserWhereUniqueInput!]
-}
-
-input UserCreateManyWithoutFollowersInput {
-  create: [UserCreateWithoutFollowersInput!]
-  connect: [UserWhereUniqueInput!]
-}
-
-input UserCreateManyWithoutFollowingInput {
-  create: [UserCreateWithoutFollowingInput!]
   connect: [UserWhereUniqueInput!]
 }
 
@@ -3779,60 +3771,8 @@ input UserCreateWithoutCollectionsInput {
   wips: WipCreateManyWithoutOwnerInput
   appreciations: AppreciationCreateManyInput
   stats: UserStatsByPeriodCreateOneInput!
-  followers: UserCreateManyWithoutFollowersInput
-  following: UserCreateManyWithoutFollowingInput
-  workExperience: WorkExperienceCreateManyInput
-}
-
-input UserCreateWithoutFollowersInput {
-  first_name: String!
-  last_name: String!
-  username: String!
-  city: String
-  state: String
-  country: String
-  company: String
-  occupation: String
-  created_on: Int!
-  url: String!
-  display_name: String!
-  twitter: String
-  fields: UserCreatefieldsInput
-  images: UserCreateimagesInput
-  links: LinkCreateManyInput
-  sections: SectionCreateManyInput
-  projects: ProjectCreateManyWithoutOwnersInput
-  wips: WipCreateManyWithoutOwnerInput
-  appreciations: AppreciationCreateManyInput
-  collections: CollectionCreateManyWithoutOwnersInput
-  stats: UserStatsByPeriodCreateOneInput!
-  following: UserCreateManyWithoutFollowingInput
-  workExperience: WorkExperienceCreateManyInput
-}
-
-input UserCreateWithoutFollowingInput {
-  first_name: String!
-  last_name: String!
-  username: String!
-  city: String
-  state: String
-  country: String
-  company: String
-  occupation: String
-  created_on: Int!
-  url: String!
-  display_name: String!
-  twitter: String
-  fields: UserCreatefieldsInput
-  images: UserCreateimagesInput
-  links: LinkCreateManyInput
-  sections: SectionCreateManyInput
-  projects: ProjectCreateManyWithoutOwnersInput
-  wips: WipCreateManyWithoutOwnerInput
-  appreciations: AppreciationCreateManyInput
-  collections: CollectionCreateManyWithoutOwnersInput
-  stats: UserStatsByPeriodCreateOneInput!
-  followers: UserCreateManyWithoutFollowersInput
+  followers: UserCreateManyInput
+  following: UserCreateManyInput
   workExperience: WorkExperienceCreateManyInput
 }
 
@@ -3857,8 +3797,8 @@ input UserCreateWithoutProjectsInput {
   appreciations: AppreciationCreateManyInput
   collections: CollectionCreateManyWithoutOwnersInput
   stats: UserStatsByPeriodCreateOneInput!
-  followers: UserCreateManyWithoutFollowersInput
-  following: UserCreateManyWithoutFollowingInput
+  followers: UserCreateManyInput
+  following: UserCreateManyInput
   workExperience: WorkExperienceCreateManyInput
 }
 
@@ -3883,8 +3823,8 @@ input UserCreateWithoutWipsInput {
   appreciations: AppreciationCreateManyInput
   collections: CollectionCreateManyWithoutOwnersInput
   stats: UserStatsByPeriodCreateOneInput!
-  followers: UserCreateManyWithoutFollowersInput
-  following: UserCreateManyWithoutFollowingInput
+  followers: UserCreateManyInput
+  following: UserCreateManyInput
   workExperience: WorkExperienceCreateManyInput
 }
 
@@ -4065,7 +4005,6 @@ input UserStatsByPeriodUpdateInput {
 
 input UserStatsByPeriodUpdateOneInput {
   create: UserStatsByPeriodCreateInput
-  disconnect: Boolean
   delete: Boolean
   update: UserStatsByPeriodUpdateDataInput
   upsert: UserStatsByPeriodUpsertNestedInput
@@ -4256,7 +4195,6 @@ input UserStatsUpdateInput {
 
 input UserStatsUpdateOneInput {
   create: UserStatsCreateInput
-  disconnect: Boolean
   delete: Boolean
   update: UserStatsUpdateDataInput
   upsert: UserStatsUpsertNestedInput
@@ -4451,8 +4389,8 @@ input UserUpdateDataInput {
   appreciations: AppreciationUpdateManyInput
   collections: CollectionUpdateManyWithoutOwnersInput
   stats: UserStatsByPeriodUpdateOneInput
-  followers: UserUpdateManyWithoutFollowersInput
-  following: UserUpdateManyWithoutFollowingInput
+  followers: UserUpdateManyInput
+  following: UserUpdateManyInput
   workExperience: WorkExperienceUpdateManyInput
 }
 
@@ -4486,9 +4424,18 @@ input UserUpdateInput {
   appreciations: AppreciationUpdateManyInput
   collections: CollectionUpdateManyWithoutOwnersInput
   stats: UserStatsByPeriodUpdateOneInput
-  followers: UserUpdateManyWithoutFollowersInput
-  following: UserUpdateManyWithoutFollowingInput
+  followers: UserUpdateManyInput
+  following: UserUpdateManyInput
   workExperience: WorkExperienceUpdateManyInput
+}
+
+input UserUpdateManyInput {
+  create: [UserCreateInput!]
+  connect: [UserWhereUniqueInput!]
+  disconnect: [UserWhereUniqueInput!]
+  delete: [UserWhereUniqueInput!]
+  update: [UserUpdateWithWhereUniqueNestedInput!]
+  upsert: [UserUpsertWithWhereUniqueNestedInput!]
 }
 
 input UserUpdateManyWithoutCollectionsInput {
@@ -4498,24 +4445,6 @@ input UserUpdateManyWithoutCollectionsInput {
   delete: [UserWhereUniqueInput!]
   update: [UserUpdateWithWhereUniqueWithoutCollectionsInput!]
   upsert: [UserUpsertWithWhereUniqueWithoutCollectionsInput!]
-}
-
-input UserUpdateManyWithoutFollowersInput {
-  create: [UserCreateWithoutFollowersInput!]
-  connect: [UserWhereUniqueInput!]
-  disconnect: [UserWhereUniqueInput!]
-  delete: [UserWhereUniqueInput!]
-  update: [UserUpdateWithWhereUniqueWithoutFollowersInput!]
-  upsert: [UserUpsertWithWhereUniqueWithoutFollowersInput!]
-}
-
-input UserUpdateManyWithoutFollowingInput {
-  create: [UserCreateWithoutFollowingInput!]
-  connect: [UserWhereUniqueInput!]
-  disconnect: [UserWhereUniqueInput!]
-  delete: [UserWhereUniqueInput!]
-  update: [UserUpdateWithWhereUniqueWithoutFollowingInput!]
-  upsert: [UserUpsertWithWhereUniqueWithoutFollowingInput!]
 }
 
 input UserUpdateManyWithoutProjectsInput {
@@ -4530,7 +4459,6 @@ input UserUpdateManyWithoutProjectsInput {
 input UserUpdateOneInput {
   create: UserCreateInput
   connect: UserWhereUniqueInput
-  disconnect: Boolean
   delete: Boolean
   update: UserUpdateDataInput
   upsert: UserUpsertNestedInput
@@ -4539,7 +4467,6 @@ input UserUpdateOneInput {
 input UserUpdateOneWithoutWipsInput {
   create: UserCreateWithoutWipsInput
   connect: UserWhereUniqueInput
-  disconnect: Boolean
   delete: Boolean
   update: UserUpdateWithoutWipsDataInput
   upsert: UserUpsertWithoutWipsInput
@@ -4566,60 +4493,8 @@ input UserUpdateWithoutCollectionsDataInput {
   wips: WipUpdateManyWithoutOwnerInput
   appreciations: AppreciationUpdateManyInput
   stats: UserStatsByPeriodUpdateOneInput
-  followers: UserUpdateManyWithoutFollowersInput
-  following: UserUpdateManyWithoutFollowingInput
-  workExperience: WorkExperienceUpdateManyInput
-}
-
-input UserUpdateWithoutFollowersDataInput {
-  first_name: String
-  last_name: String
-  username: String
-  city: String
-  state: String
-  country: String
-  company: String
-  occupation: String
-  created_on: Int
-  url: String
-  display_name: String
-  twitter: String
-  fields: UserUpdatefieldsInput
-  images: UserUpdateimagesInput
-  links: LinkUpdateManyInput
-  sections: SectionUpdateManyInput
-  projects: ProjectUpdateManyWithoutOwnersInput
-  wips: WipUpdateManyWithoutOwnerInput
-  appreciations: AppreciationUpdateManyInput
-  collections: CollectionUpdateManyWithoutOwnersInput
-  stats: UserStatsByPeriodUpdateOneInput
-  following: UserUpdateManyWithoutFollowingInput
-  workExperience: WorkExperienceUpdateManyInput
-}
-
-input UserUpdateWithoutFollowingDataInput {
-  first_name: String
-  last_name: String
-  username: String
-  city: String
-  state: String
-  country: String
-  company: String
-  occupation: String
-  created_on: Int
-  url: String
-  display_name: String
-  twitter: String
-  fields: UserUpdatefieldsInput
-  images: UserUpdateimagesInput
-  links: LinkUpdateManyInput
-  sections: SectionUpdateManyInput
-  projects: ProjectUpdateManyWithoutOwnersInput
-  wips: WipUpdateManyWithoutOwnerInput
-  appreciations: AppreciationUpdateManyInput
-  collections: CollectionUpdateManyWithoutOwnersInput
-  stats: UserStatsByPeriodUpdateOneInput
-  followers: UserUpdateManyWithoutFollowersInput
+  followers: UserUpdateManyInput
+  following: UserUpdateManyInput
   workExperience: WorkExperienceUpdateManyInput
 }
 
@@ -4644,8 +4519,8 @@ input UserUpdateWithoutProjectsDataInput {
   appreciations: AppreciationUpdateManyInput
   collections: CollectionUpdateManyWithoutOwnersInput
   stats: UserStatsByPeriodUpdateOneInput
-  followers: UserUpdateManyWithoutFollowersInput
-  following: UserUpdateManyWithoutFollowingInput
+  followers: UserUpdateManyInput
+  following: UserUpdateManyInput
   workExperience: WorkExperienceUpdateManyInput
 }
 
@@ -4670,24 +4545,19 @@ input UserUpdateWithoutWipsDataInput {
   appreciations: AppreciationUpdateManyInput
   collections: CollectionUpdateManyWithoutOwnersInput
   stats: UserStatsByPeriodUpdateOneInput
-  followers: UserUpdateManyWithoutFollowersInput
-  following: UserUpdateManyWithoutFollowingInput
+  followers: UserUpdateManyInput
+  following: UserUpdateManyInput
   workExperience: WorkExperienceUpdateManyInput
+}
+
+input UserUpdateWithWhereUniqueNestedInput {
+  where: UserWhereUniqueInput!
+  data: UserUpdateDataInput!
 }
 
 input UserUpdateWithWhereUniqueWithoutCollectionsInput {
   where: UserWhereUniqueInput!
   data: UserUpdateWithoutCollectionsDataInput!
-}
-
-input UserUpdateWithWhereUniqueWithoutFollowersInput {
-  where: UserWhereUniqueInput!
-  data: UserUpdateWithoutFollowersDataInput!
-}
-
-input UserUpdateWithWhereUniqueWithoutFollowingInput {
-  where: UserWhereUniqueInput!
-  data: UserUpdateWithoutFollowingDataInput!
 }
 
 input UserUpdateWithWhereUniqueWithoutProjectsInput {
@@ -4705,22 +4575,16 @@ input UserUpsertWithoutWipsInput {
   create: UserCreateWithoutWipsInput!
 }
 
+input UserUpsertWithWhereUniqueNestedInput {
+  where: UserWhereUniqueInput!
+  update: UserUpdateDataInput!
+  create: UserCreateInput!
+}
+
 input UserUpsertWithWhereUniqueWithoutCollectionsInput {
   where: UserWhereUniqueInput!
   update: UserUpdateWithoutCollectionsDataInput!
   create: UserCreateWithoutCollectionsInput!
-}
-
-input UserUpsertWithWhereUniqueWithoutFollowersInput {
-  where: UserWhereUniqueInput!
-  update: UserUpdateWithoutFollowersDataInput!
-  create: UserCreateWithoutFollowersInput!
-}
-
-input UserUpsertWithWhereUniqueWithoutFollowingInput {
-  where: UserWhereUniqueInput!
-  update: UserUpdateWithoutFollowingDataInput!
-  create: UserCreateWithoutFollowingInput!
 }
 
 input UserUpsertWithWhereUniqueWithoutProjectsInput {
@@ -5631,7 +5495,6 @@ input WipStatsUpdateInput {
 
 input WipStatsUpdateOneInput {
   create: WipStatsCreateInput
-  disconnect: Boolean
   delete: Boolean
   update: WipStatsUpdateDataInput
   upsert: WipStatsUpsertNestedInput
