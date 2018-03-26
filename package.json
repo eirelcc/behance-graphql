@@ -11,8 +11,7 @@
     "dependencies": {
         "bcryptjs": "^2.4.3",
         "graphql-yoga": "1.6.1",
-        "prisma-binding": "^1.5.15",
-        "qs": "^6.5.1"
+        "prisma-binding": "^1.5.15"
     },
     "devDependencies": {
         "dotenv": "^5.0.1",

@@ -1,5 +1,4 @@
 const jwt = require('jsonwebtoken');
-const qs = require('qs');
 
 const APP_SECRET = 'GraphQL-is-aw3some';
 const BASE_URL = 'https://api.behance.net/v2';
@@ -15,16 +14,22 @@ function getUserId(context) {
     throw new Error('Not authenticated');
 }
 
-async function fetchByURL(relativeURL, params) {
-    const queryParams = qs.stringify({
+async function fetchByURL(url, params) {
+    const qs = toQS({
         ...params,
         client_id: process.env.CLIENT_ID
     });
-    const res = await fetch(`${BASE_URL}${relativeURL}?${queryParams}`);
+    const res = await fetch(`${BASE_URL}${url}?${qs}`);
     const json = await res.json();
     const [data] = json ? Object.values(json) : [];
 
     return data;
+}
+
+function toQS(params) {
+    return Object.entries(params)
+        .map(entry => entry.map(encodeURIComponent).join('='))
+        .join('&');
 }
 
 module.exports = {
