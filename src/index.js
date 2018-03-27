@@ -6,6 +6,12 @@ const resolvers = require('./resolvers');
 require('isomorphic-fetch');
 require('dotenv').config();
 
+if (!process.env.CLIENT_ID) {
+    throw new Error(
+        'Please provide an API key for Behance in the environment variable CLIENT_ID.'
+    );
+}
+
 const server = new GraphQLServer({
     typeDefs: path.join(__dirname, 'schema.graphql'),
     resolvers,
