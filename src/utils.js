@@ -1,3 +1,4 @@
+const fetch = require('node-fetch');
 const jwt = require('jsonwebtoken');
 
 const APP_SECRET = 'GraphQL-is-aw3some';
@@ -14,22 +15,22 @@ function getUserId(context) {
     throw new Error('Not authenticated');
 }
 
+function toURLString(params) {
+    return Object.entries(params)
+        .map(entry => entry.map(encodeURIComponent).join('='))
+        .join('&');
+}
+
 async function fetchByURL(url, params) {
-    const qs = toQS({
+    const queryParams = toURLString({
         ...params,
         client_id: process.env.CLIENT_ID
     });
-    const res = await fetch(`${BASE_URL}${url}?${qs}`);
+    const res = await fetch(`${BASE_URL}${url}?${queryParams}`);
     const json = await res.json();
     const [data] = json ? Object.values(json) : [];
 
     return data;
-}
-
-function toQS(params) {
-    return Object.entries(params)
-        .map(entry => entry.map(encodeURIComponent).join('='))
-        .join('&');
 }
 
 module.exports = {
