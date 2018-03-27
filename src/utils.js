@@ -8,8 +8,8 @@ function getUserId(context) {
     const Authorization = context.request.get('Authorization');
     if (Authorization) {
         const token = Authorization.replace('Bearer ', '');
-        const { userId } = jwt.verify(token, APP_SECRET);
-        return userId;
+        const { username } = jwt.verify(token, APP_SECRET);
+        return username;
     }
 
     throw new Error('Not authenticated');

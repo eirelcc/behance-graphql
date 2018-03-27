@@ -20,17 +20,15 @@ const followers = (user, args) =>
 const following = (user, args) =>
     fetchByURL(`/users/${user.id}/following`, args.params);
 
-const workExperience = async user => {
+const workExperience = async (user) => {
     const data = await fetchByURL(`/users/${user.id}/work_experience`);
     return Array.isArray(data) ? data : [];
 };
 
-const sections = user => {
-    return Object.entries(user.sections).map(([title, text]) => ({
+const sections = user => Object.entries(user.sections).map(([title, text]) => ({
         title,
         text
     }));
-};
 
 module.exports = {
     projects,

@@ -1,14 +1,14 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const { APP_SECRET, getUserId } = require('../utils');
+const { APP_SECRET } = require('../utils');
 
-async function signup(parent, args, ctx, info) {
+async function signup(parent, args, ctx) {
     const password = await bcrypt.hash(args.password, 10);
     const user = await ctx.db.mutation.createSU({
         data: { ...args, password }
     });
 
-    const token = jwt.sign({ userId: user.id }, APP_SECRET);
+    const token = jwt.sign({ username: user.username }, APP_SECRET);
 
     return {
         token,
@@ -16,7 +16,7 @@ async function signup(parent, args, ctx, info) {
     };
 }
 
-async function login(parent, args, ctx, info) {
+async function login(parent, args, ctx) {
     const user = await ctx.db.query.sU({
         where: { username: args.username }
     });
@@ -30,7 +30,7 @@ async function login(parent, args, ctx, info) {
     }
 
     return {
-        token: jwt.sign({ userId: user.id }, APP_SECRET),
+        token: jwt.sign({ username: user.username }, APP_SECRET),
         user
     };
 }
